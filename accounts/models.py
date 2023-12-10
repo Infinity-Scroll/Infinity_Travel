@@ -8,21 +8,26 @@ from core.models import TimestampedModel
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, gender, password=None):
+    def create_user(self, email, gender, nickname, birth, password=None):
         if email == None:
             raise TypeError("이메일 필수값입니다.")
         if password is None:
             raise TypeError("비밀번호는 필수값입니다.")
 
-        user = self.model(email=self.normalize_email(email), gender=gender)
+        user = self.model(
+            email=self.normalize_email(email),
+            gender=gender,
+            nickname=nickname,
+            birth=birth,
+        )
 
         user.set_password(password)
         user.save()
 
         return user
 
-    def create_superuser(self, email, gender, password):
-        user = self.create_user(email, gender, password)
+    def create_superuser(self, email, gender, nickname, birth, password):
+        user = self.create_user(email, gender, nickname, birth, password)
 
         user.is_staff = True
         user.is_superuser = True
@@ -42,18 +47,15 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
         ("Female", "여자"),
     ]
     gender = models.CharField(max_length=6, choices=GENDER)
-    REQUIRED_FIELDS = ["password", "gender"]
+    nickname = models.CharField(max_length=20)
+    birth = models.DateField()
+    introduce = models.TextField()
+    REQUIRED_FIELDS = ["password", "gender", "nickname", "birth"]
 
     def __str__(self):
         return self.email
 
     def get_full_name(self):
-        if self.profile.nickname:
-            return self.profile.nickname
+        if self.nickname:
+            return self.nickname
         return None
-
-
-class Profile(TimestampedModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profile")
-    nickname = models.CharField(max_length=30)
-    introduce = models.CharField(max_length=200)

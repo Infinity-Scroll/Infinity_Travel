@@ -2,7 +2,7 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import generics, status, mixins
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from .models import User, Profile
+from .models import User
 from .serializers import UserCreateSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
@@ -17,14 +17,10 @@ class UserCreateAPIView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-
-        user = serializer.instance
-        profile = Profile.objects.create(user=user)
-
         headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers
-        )
+
+        response = {"email": serializer.data["email"], "message": "회원가입에 성공하였습니다."}
+        return Response(response, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class LoginView(TokenObtainPairView):
