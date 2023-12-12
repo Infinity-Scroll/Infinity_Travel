@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,10 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-bpl!rgpuh75v3z(%w9-8_4%lv9c^hj!z6o_1n^j)%a+xwa_t1g"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG")
 
 ALLOWED_HOSTS = ["*"]
 
@@ -177,10 +180,10 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "InfinifyTravel Project API Document",
-    "CONTACT": {
-        "name": "김창환",
-        "url": "https://github.com/Blood-donation-day",
-        "email": "98susckdghks@naver.com",
-    },
+    # "CONTACT": {
+    #     "name": "김창환",
+    #     "url": "https://github.com/Blood-donation-day",
+    #     "email": "98susckdghks@naver.com",
+    # },
     "VERSION": "1.0.0",
 }
