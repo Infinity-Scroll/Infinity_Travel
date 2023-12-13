@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+
+<body>
+
+    <div id="chat-container">
+        <!-- Chat messages will be displayed here -->
+    </div>
+
+    <form id='form' action="">
+        <textarea name="message" id="message" cols="30" rows="10"></textarea>
+        <input type="submit" value="보내기">
+    </form>
+
+    <script>
+        const chaturl = 'ws://127.0.0.1:8000/'
+
+        let url = `${chaturl}ws/socket-server/`
+        const chatSocket = new WebSocket(url)
+
+        chatSocket.onmessage = function (e) {
+            let data = JSON.parse(e.data)
+            console.log('Data:', data)
+
+            if (data.type === 'chat') {
+                let chatContainer = document.getElementById('chat-container');
+                chatContainer.insertAdjacentHTML('beforeend', `<div><p>${data.message}</p></div>`);
+            }
+        }
+
+        let form = document.getElementById('form')
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            let message = document.getElementById('message').value;
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'type': 'chat'
+            }))
+            form.reset()
+        })
+    </script>
+</body>
+
+</html>

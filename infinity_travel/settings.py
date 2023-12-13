@@ -35,6 +35,8 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "corsheaders",
     "accounts",
+    "chat",
 ]
 
 MIDDLEWARE = [
@@ -77,8 +80,24 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "infinity_travel.wsgi.application"
+ASGI_APPLICATION = "infinity_travel.asgi.application"
 
-
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [
+                {
+                    "host": "127.0.0.1",
+                    "port": 6379,
+                    # password: ###
+                    # "host": os.environ.get('REDIS_CLOUD_HOST'),
+                    # "port": os.environ.get('REDIS_CLOUD_PORT') or 6379,
+                }
+            ],
+        },
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
