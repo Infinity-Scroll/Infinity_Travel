@@ -10,7 +10,7 @@
     <textarea id="chat-log" cols="100" rows="20"></textarea><br>
     <input id="chat-message-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
-    {{ room_name|json_script:"room-name" }}
+    {{ "room-name 입력" }}
     <input type="text" id="room-name" value="hi">
 
 </body>
@@ -49,6 +49,26 @@
         }));
         messageInputDom.value = '';
     };
+
+    const 임시로그인 = login()
+    function login() {
+        const response = fetch('http://127.0.0.1:8000/accounts/login/', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                "email": "test123@test123.com",
+                "password": "test123"
+            }),
+        });
+
+        if (response.ok) {
+            const logindata = response.json();
+            console.log(logindata)
+        }
+    }
 </script>
 
 </html>

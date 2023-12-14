@@ -52,6 +52,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -195,7 +196,8 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = "accounts.User"
 
 # 배포 시 설정변경
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True  # <-쿠키가 cross-site HTTP 요청에 포함될 수 있다
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "InfinifyTravel Project API Document",

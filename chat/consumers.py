@@ -1,6 +1,7 @@
 import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
+from rest_framework_simplejwt.tokens import AccessToken
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -9,6 +10,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = f"chat_{self.room_name}"
 
+        token = self.scope["cookies"]["access_token"]
+        print("쿠키_access_token:", token)
+        user_id = AccessToken(token)
+        print("user_id:", user_id["user_id"])
         # 그룹 입장
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
@@ -23,7 +28,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
 
-        print("Message:", message)
+        # print("Message:", message)
 
         # 그룹의 이벤트를 받기
         await self.channel_layer.group_send(
@@ -32,5 +37,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def chat_message(self, event):
         message = event["message"]
-
+        print(event)  # {'type': 'chat.message', 'message': 'ㄴㅇ'}
         await self.send(text_data=json.dumps({"message": message}))
