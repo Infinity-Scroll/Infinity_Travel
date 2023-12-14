@@ -6,6 +6,8 @@ from .models import User
 from .serializers import UserCreateSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework.views import APIView
+from core.permissions import get_user_id
 
 
 class UserCreateAPIView(generics.CreateAPIView):
@@ -52,3 +54,11 @@ class RefreshTokenView(TokenRefreshView):
         response = Response(serializer.validated_data, status=status.HTTP_200_OK)
         response.set_cookie("access_token", access_token)
         return response
+
+
+class TestView(APIView):
+    def get(self, request):
+        user_id = get_user_id(request)
+
+        print("user_id:", user_id)  # user_id: 1
+        return Response({"message": "Accepted"})
