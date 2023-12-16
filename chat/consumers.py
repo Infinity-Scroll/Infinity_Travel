@@ -4,34 +4,25 @@ from rest_framework_simplejwt.tokens import AccessToken, TokenError
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from channels.db import database_sync_to_async
-
+from .models import *
+from django.shortcuts import get_object_or_404
+from .utils import *
 
 User = get_user_model()
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
-    @database_sync_to_async
-    def get_user(self, user_id):
-        return User.objects.get(pk=user_id)
-
     async def connect(self):
-        print("Scope:", self.scope)
-        self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
+        user = await get_user_from_cookie(self)
+        user2 = await get_user2_from_roomname(self)
+        room = await get_room(user, user2)
+        self.scope["user"] = user
+        self.scope["user2"] = user2
+        self.scope["room"] = room
+
+        self.room_name = f"{min(user.pk, user2.pk)}_{max(user.pk, user2.pk)}"
         self.room_group_name = f"chat_{self.room_name}"
-
-        try:
-            token = self.scope["cookies"]["access_token"]
-            user_id = AccessToken(token)["user_id"]
-
-            user = await self.get_user(user_id)
-            self.scope["user"] = user
-            print(user)
-            # print("user", self.scope["user"]) #AnonymousUser
-
-        except TokenError:
-            await self.close()
-            return Response({"error": "토큰만료"}, status=401)
-
+        print(f"채팅방이름: {self.room_group_name}")
         # 그룹 입장
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
@@ -41,24 +32,36 @@ class ChatConsumer(AsyncWebsocketConsumer):
         """
         사용자와 WebSocket 연결이 끊겼을 때 호출
         """
+        # 누군가 들어오거나 나갈때 마다 db에 채팅내역 저장
         # 채팅방을 삭제하거나 보낸사람 or 받는사람에 대한 추가로직 작성필요
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
-
+        print("유저:", self.scope["user"])
         user = self.scope["user"]
         # 그룹의 이벤트를 받기
         await self.channel_layer.group_send(
             self.room_group_name,
-            {"type": "chat.message", "username": user.nickname, "message": message},
+            {
+                "type": "chat.message",
+                "username": user.nickname,
+                "message": message,
+            },
         )
+        print("receive에서 발생한이벤트")
 
     async def chat_message(self, event):
         message = event["message"]
-        user = self.scope["user"]
-        print(event)  # {'type': 'chat.message', "username": user.pk, 'message': 'ㄴㅇ'}
+        nickname = event["username"]
+        print(
+            event
+        )  # {'type': 'chat.message', "username": user.nickname, 'message': '메세지'}
         await self.send(
-            text_data=json.dumps({"username": user.nickname, "message": message})
+            text_data=json.dumps({"username": nickname, "message": message})
         )
+        print("chat_message에서 발생한이벤트")
+
+    # def get_redis_messages(self):
+    #     for i in self.channel_layer.

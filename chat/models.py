@@ -2,28 +2,23 @@ from django.db import models
 from core.models import TimestampedModel
 from django.contrib.auth import get_user_model
 
-# Create your models here.
-
 User = get_user_model()
 
 
 class Room(TimestampedModel):
-    sender = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="room_sender"
-    )
-    sender_unread_count = models.IntegerField()
-    sender_is_deleted = models.BooleanField()
-
-    receiver = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="room_receiver"
-    )
-    receiver_unread_count = models.IntegerField()
-    receiver_is_deleted = models.BooleanField()
-
+    member = models.ManyToManyField(User)
+    room_name = models.CharField(max_length=50)
     lastest_text = models.TextField("마지막 대화")
 
 
-class Message(TimestampedModel):
-    room = models.ForeignKey(Room, on_delete=models.CASCADE)
-    text_message = models.TextField()
-    is_read = models.BooleanField()
+class Message(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="rooms")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="messages")
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return f"{self.user.nickname}: {self.message}"
+
+    def last_30_messages(self):
+        return Message.objects.order_by("-created_at").all()[:30]

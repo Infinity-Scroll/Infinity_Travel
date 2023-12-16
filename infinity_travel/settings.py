@@ -83,24 +83,28 @@ TEMPLATES = [
 WSGI_APPLICATION = "infinity_travel.wsgi.application"
 ASGI_APPLICATION = "infinity_travel.asgi.application"
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [
-                {
-                    "host": "127.0.0.1",
-                    "port": 6379,
-                    # password: ###
-                    # "host": os.environ.get('REDIS_CLOUD_HOST'),
-                    # "port": os.environ.get('REDIS_CLOUD_PORT') or 6379,
-                }
-            ],
+REDIS = os.environ.get("REDIS")
+
+if REDIS:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [
+                    {
+                        "host": "127.0.0.1",
+                        "port": 6379,
+                        # password: ###
+                        # "host": os.environ.get('REDIS_CLOUD_HOST'),
+                        # "port": os.environ.get('REDIS_CLOUD_PORT') or 6379,
+                    }
+                ],
+            },
         },
-    },
-}
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+    }
+else:
+    CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
+
 
 DATABASES = {
     "default": {
@@ -109,9 +113,6 @@ DATABASES = {
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -153,7 +154,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.permissions.IsAuthenticated",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         # 'rest_framework.permissions.AllowAny', # 누구나 접근
