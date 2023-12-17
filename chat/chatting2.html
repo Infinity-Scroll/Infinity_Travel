@@ -17,6 +17,33 @@
     </div>
 </body>
 <script>
+
+
+    async function 임시로그인() {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/accounts/login/', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    "email": "test123@test123.com",
+                    "password": "test123"
+                }),
+            });
+
+            if (response.ok) {
+                const logindata = await response.json();
+                console.log(logindata);
+
+                // 로그인 후 웹소켓 연결 등 추가 작업 수행
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+        }
+    };
+    임시로그인()
     const roomName = document.getElementById('room-name').value;
     const myname = document.querySelector('.myname')
     const chatSocket = new WebSocket(
@@ -28,6 +55,7 @@
     );
 
     chatSocket.onmessage = function (e) {
+        e.preventDefault();
         const data = JSON.parse(e.data);
         document.querySelector('#chat-log').value += (data.username + ': ' + data.message + '\n');
         myname.innerHTML = data.username
@@ -46,6 +74,7 @@
     };
 
     document.querySelector('#chat-message-submit').onclick = function (e) {
+        e.preventDefault();
         const messageInputDom = document.querySelector('#chat-message-input');
         const message = messageInputDom.value;
         chatSocket.send(JSON.stringify({
@@ -54,25 +83,7 @@
         messageInputDom.value = '';
     };
 
-    const 임시로그인 = login()
-    function login() {
-        const response = fetch('http://127.0.0.1:8000/accounts/login/', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                "email": "test123@test123.com",
-                "password": "test123"
-            }),
-        });
 
-        if (response.ok) {
-            const logindata = response.json();
-            console.log(logindata)
-        }
-    }
 </script>
 
 </html>

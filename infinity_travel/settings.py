@@ -154,7 +154,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
+        "core.permissions.JWTCookieAuthenticated",  # 쿠키값으로 인증
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         # 'rest_framework.permissions.AllowAny', # 누구나 접근

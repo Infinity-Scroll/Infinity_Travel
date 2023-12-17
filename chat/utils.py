@@ -1,8 +1,8 @@
 from channels.db import database_sync_to_async
-from .models import *
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import AccessToken, TokenError
 from rest_framework.response import Response
+from .models import *
 
 User = get_user_model()
 
@@ -20,22 +20,19 @@ def get_user2_from_roomname(self):
     return user2
 
 
-@database_sync_to_async
-def save_message(self, message, roomid, userid):
-    user = User.objects.get(pk=userid)
-    room = Room.objects.get(pk=roomid)
-    message = Message.objects.create(user=user, room=room, message=message)
+# @database_sync_to_async
+# def save_message(room, user, message):
+#     message = Message.objects.create(user=user, room=room, message=message)
 
-    return {
-        "action": "message",
-        "user": userid,
-        "roomid": roomid,
-        "message": message,
-        "user": userid,
-        # 'userprofile' : user.profileimg.url,  프로필이미지
-        "username": user.nickname,
-        "created_at": str(message.created_at),
-    }
+#     return {
+#         "action": "message",
+#         "user": user,
+#         "roomid": room,
+#         "message": message,
+#         # 'userprofile' : user.profileimg.url,  프로필이미지
+#         "username": user.nickname,
+#         "created_at": str(message.created_at),
+#     }
 
 
 async def get_user_from_cookie(self):
