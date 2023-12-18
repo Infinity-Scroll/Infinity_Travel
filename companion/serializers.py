@@ -12,12 +12,21 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('id', 'companion_post', 'comment_text', 'replies')
+        fields = ('id', 'companion_post', 'comment_text', 'replies', 'parent_comment')
 
     def get_replies(self, obj):
-        replies = Comment.objects.filter(parent_comment=obj)
+        replies = Comment.objects.filter(parent_comment=obj.id)
         serializer = CommentSerializer(replies, many=True)
         return serializer.data
+    
+    def validate(self, data):
+        parent_comment = data.get('parent_comment')
+        companion_post = data.get('companion_post')
+
+        if parent_comment and parent_comment.companion_post != companion_post:
+            raise serializers.ValidationError("게시글의 주소가 올바르지 않습니다.")
+
+        return data
 
 
 class CompanionSerializer(serializers.ModelSerializer):
