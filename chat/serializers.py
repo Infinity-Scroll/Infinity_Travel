@@ -8,7 +8,7 @@ class RoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ["other_user", "room_name", "lastest_text"]
+        fields = ["other_user", "room_name", "lastest_text", "updated_at"]
 
     def get_other_user(self, room):
         request = self.context.get("request")
@@ -21,6 +21,8 @@ class RoomSerializer(serializers.ModelSerializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
+    nickname = serializers.CharField(source="user.nickname", read_only=True)
+
     class Meta:
         model = Message
-        fields = ["user", "message", "created_at"]
+        fields = ["nickname", "message", "created_at"]

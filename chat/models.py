@@ -6,8 +6,9 @@ User = get_user_model()
 
 
 class Room(TimestampedModel):
-    member = models.ManyToManyField(User)
+    member = models.ManyToManyField(User, related_name="member")
     room_name = models.CharField(max_length=50)
+    invisible = models.ManyToManyField(User, "room_invisible")
     lastest_text = models.TextField("마지막 대화")
 
 
@@ -19,6 +20,3 @@ class Message(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.nickname}: {self.message}"
-
-    def last_30_messages(self):
-        return Message.objects.order_by("-created_at").all()[:30]

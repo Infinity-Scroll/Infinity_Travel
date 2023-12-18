@@ -46,6 +46,38 @@
     임시로그인()
     const roomName = document.getElementById('room-name').value;
     const myname = document.querySelector('.myname')
+    const chatLog = document.querySelector('#chat-log');
+    let currentPage = 1;
+    async function loadChatHistory() {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/chat/6_7/?page=${currentPage}`, {
+                method: "GET",  // GET 메서드로 변경
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            });
+            if (response.ok) {
+                const data = await response.json();
+                const results = data.results;
+
+                // 채팅 기록을 화면에 표시
+                results.reverse().forEach(message => {
+                    chatLog.value += `${message.nickname}: ${message.message}\n`;
+                });
+
+                // 현재 페이지 업데이트
+                currentPage += 1;
+            }
+        } catch (error) {
+            console.error('Failed to load chat history:', error);
+        }
+    }
+
+    loadChatHistory();
+
+
+
     const chatSocket = new WebSocket(
         'ws://'
         + '127.0.0.1:8000'
