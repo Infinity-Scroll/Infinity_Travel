@@ -8,7 +8,9 @@ from core.models import TimestampedModel
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, gender, nickname, birth, password=None):
+    def create_user(
+        self, email, gender, nickname, birth, password=None, **extra_fields
+    ):
         if email == None:
             raise TypeError("이메일 필수값입니다.")
         if password is None:
@@ -19,6 +21,7 @@ class UserManager(BaseUserManager):
             gender=gender,
             nickname=nickname,
             birth=birth,
+            **extra_fields,
         )
 
         user.set_password(password)

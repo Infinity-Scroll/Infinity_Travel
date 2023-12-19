@@ -2,6 +2,14 @@ from rest_framework import serializers
 from .models import User
 from django.contrib.auth.password_validation import validate_password
 import datetime
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.core.mail import EmailMessage
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -30,5 +38,16 @@ class UserCreateSerializer(serializers.ModelSerializer):
             gender=validated_data["gender"],
             nickname=validated_data["nickname"],
             birth=validated_data["birth"],
+            is_active=False,
         )
+        token = default_token_generator.make_token(user)
+
+        verification_link = f"http://{os.environ.get('HOST')}/accounts/verify-email/{urlsafe_base64_encode(force_bytes(user.pk))}/{token}/"
+        message = f"가입을 완료하려면 다음 링크를 클릭하세요: {verification_link}"
+        email_message = EmailMessage(
+            subject="Infinify_Travel 회원가입 인증 메일입니다.",
+            body=message,
+            to=[validated_data["email"]],
+        )
+        email_message.send()
         return user
