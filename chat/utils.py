@@ -26,15 +26,15 @@ def save_message(room, user, message):
         message = Message.objects.create(user=user, room=room, message=message)
     except Exception as e:
         print("생성실패", e)
-    # return {
-    #     "action": "message",
-    #     "user": user.id,
-    #     "roomid": room.id,
-    #     "message": message.message,
-    #     # 'userprofile' : user.profileimg.url,  프로필이미지
-    #     "username": user.nickname,
-    #     "created_at": str(message.created_at),
-    # }
+    return {
+        "action": "message",
+        "user": user.id,
+        "roomname": room.room_name,
+        "message": message.message,
+        # 'userprofile' : user.profileimg.url,  프로필이미지
+        "username": user.nickname,
+        "created_at": str(message.created_at),
+    }
 
 
 async def get_user_from_cookie(self):

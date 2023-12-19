@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from channels.db import database_sync_to_async
 
 User = get_user_model()
-room_name = "test"
+room_name = "1_2"
 email = "test12@test12.com"
 password = "testpw123"
 loginurl = "/accounts/login/"
@@ -14,9 +14,17 @@ testmessage = "hello world"
 
 class MyTests(TestCase):
     def setUp(self):
+        print("----------유저 생성-----------")
         self.user = User.objects.create_user(
             email=email,
             password=password,
+            gender="Male",
+            nickname="test",
+            birth="2023-11-11",
+        )
+        self.user2 = User.objects.create_user(
+            email="test222@test22.com",
+            password="testpassword2222",
             gender="Male",
             nickname="test",
             birth="2023-11-11",
@@ -52,6 +60,6 @@ class MyTests(TestCase):
         await communicator.send_json_to({"message": testmessage})
         response = await communicator.receive_json_from()
         print("받은 메세지:", response)
-        assert response["message"] == testmessage
+        assert response["message"]["message"] == testmessage
 
         await communicator.disconnect()

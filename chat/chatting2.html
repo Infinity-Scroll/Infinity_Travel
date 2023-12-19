@@ -15,6 +15,9 @@
     <div>
         <span>내이름: <span class="myname"></span></span>
     </div>
+    <!-- <div>방목록
+        <textarea id="chat-rooms" cols="50" rows="10"></textarea><br>
+    </div> -->
 </body>
 <script>
 
@@ -47,6 +50,7 @@
     const roomName = document.getElementById('room-name').value;
     const myname = document.querySelector('.myname')
     const chatLog = document.querySelector('#chat-log');
+    const RoomList = document.getElementById('chat-rooms')
     let currentPage = 1;
     async function loadChatHistory() {
         try {

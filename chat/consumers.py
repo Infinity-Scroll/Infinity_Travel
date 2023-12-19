@@ -38,7 +38,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json["message"]
         chat_message = await save_message(room, user, message)
 
-        print(chat_message)
         #  최근메세지 저장
         update_room_async = database_sync_to_async(
             lambda: setattr(room, "lastest_text", message)
