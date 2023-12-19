@@ -8,6 +8,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import Companion, Comment, Tag
 from .serializers import CompanionSerializer, CommentSerializer, TagSerializer
 from .permissions import IsOwnerOrReadOnly
+from core.permissons import JWTCookieIsOwnerorReadOnly
 
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
@@ -19,7 +20,7 @@ class CompanionViewSet(viewsets.ModelViewSet):
 
     # JWTAuthentication 적용
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [JWTCookieIsOwnerorReadOnly]
 
     # JWTAuthentication 적용하지 않는 액션들에 대한 decorator
     @action(detail=False, methods=['get'])
