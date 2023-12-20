@@ -50,6 +50,9 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     nickname = models.CharField(max_length=20)
     birth = models.DateField()
     introduce = models.TextField()
+    profile_img = models.ImageField(
+        upload_to="accounts/profile_img/%y/%m%d", blank=True
+    )
     REQUIRED_FIELDS = ["password", "gender", "nickname", "birth"]
 
     def __str__(self):
