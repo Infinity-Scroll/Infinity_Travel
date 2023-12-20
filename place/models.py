@@ -1,29 +1,32 @@
-# place/models.py
-
 from django.db import models
-from geopy.geocoders import Nominatim
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
-from .geoCode import get_coordinates_from_address
+# from django.db.models.signals import pre_save
+# from django.dispatch import receiver
+from .geoCode import get_coordinates
+from django.conf import settings
 
 class Place(models.Model):
-    name = models.CharField(max_length=255, null=False)  # 이름
-    description = models.TextField(null=False)  # 설명
-    address = models.CharField(max_length=255, null=False)  # 주소
-    category = models.CharField(max_length=255, null=False)  # 분류    
-    contact = models.CharField(max_length=20, null=True)  # 찾아오시는 방법
-    website = models.URLField()  # 웹사이트
-    photo = models.ImageField(upload_to='place_photos/', blank=True, null=False)  # 대표사진
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
+    name = models.CharField(max_length=255, null=False)
+    description = models.TextField(null=False)
+    address = models.CharField(max_length=255, null=False)
+    category = models.CharField(max_length=255, null=False)
+    contact = models.CharField(max_length=20, null=True, blank=True)  # 선택 사항으로 변경
+    website = models.URLField(null=True, blank=True)  # 선택 사항으로 변경
+    photo = models.ImageField(upload_to='place_photos/', blank=False, null=False)  # 필수 입력으로 변경
+    latitude = models.FloatField(blank=True, null=True,editable=False)
+    longitude = models.FloatField(blank=True, null=True,editable=False)
+    rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(6)])
 
     def save(self, *args, **kwargs):
-        if not self.latitude or not self.longitude:
-            # 좌표값이 비어있는 경우, 주소를 이용하여 좌표값을 얻어옴
-            coordinates = get_coordinates_from_address(self.address)
+        # 만약 주소가 비어 있다면
+        if not self.latitude and not self.longitude and self.address:
+            # 주소를 이용하여 좌표를 가져옴
+            coordinates = get_coordinates(self.address)
+            
             if coordinates:
                 self.latitude, self.longitude = coordinates
-        super().save(*args, **kwargs)
+
+        # 부모의 save 메서드 호출
+        super(Place, self).save(*args, **kwargs)
 
     
     def __str__(self):
@@ -34,18 +37,9 @@ class Place(models.Model):
         
 class Comment(models.Model):
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
-    author = models.CharField(max_length=255)  # or use ForeignKey(User, on_delete=models.CASCADE) for user model
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.TextField()
     rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(6)])  # 0 to 5 rating
 
     def __str__(self):
-        return f"{self.author}'s comment on {self.place.name}"
-
-
-@receiver(pre_save, sender=Place)
-def update_coordinates(sender, instance, **kwargs):
-    if not instance.latitude or not instance.longitude:
-        # 좌표값이 비어있는 경우, 주소를 이용하여 좌표값을 얻어옴
-        coordinates = get_coordinates_from_address(instance.address)
-        if coordinates:
-            instance.latitude, instance.longitude = coordinates
+        return f"{self.author}'s commen t on {self.place.name}"

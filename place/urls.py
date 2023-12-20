@@ -9,6 +9,14 @@ router.register(r'comments', CommentViewSet, basename='comment')
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
+
+'''
+Comment 생성 (POST): /api/comments/
+Comment 목록 조회 (GET): /api/comments/
+특정 Comment 조회 (GET): /api/comments/<comment_id>/
+특정 Comment 수정 (PUT or PATCH): /api/comments/<comment_id>/
+특정 Comment 삭제 (DELETE): /api/comments/<comment_id>/
+'''

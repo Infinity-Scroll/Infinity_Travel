@@ -1,35 +1,42 @@
-# schedule/urls.py
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import PlannerViewSet, PeriodEventViewSet, DateEventViewSet, DateEventPlaceViewSet,PlannerListCreateAPIView, PlannerDetailAPIView
 
-from django.urls import path
-from .views import (
-    PlannerListCreateAPIView, PlannerDetailAPIView,
-    PeriodEventListCreateAPIView, PeriodEventDetailAPIView,
-    DateEventListCreateAPIView, DateEventDetailAPIView, PlannerListAPIView,
-    PlannerCreateAPIView, PeriodEventCreateAPIView, DateEventCreateAPIView,
-    PlannerEditAPIView, PlannerDeleteAPIView, PeriodEventEditAPIView,
-    PeriodEventDeleteAPIView, DateEventEditAPIView, DateEventDeleteAPIView
-)
+# DefaultRouter 객체 생성
+router = DefaultRouter()
 
+# 각각의 viewset을 router에 등록
+router.register(r'planners', PlannerViewSet)
+router.register(r'period-events', PeriodEventViewSet)
+router.register(r'date-events', DateEventViewSet)
+router.register(r'date-event-places', DateEventPlaceViewSet)  # DateEventPlaceViewSet 추가
+
+# urlpatterns에 router.urls를 include하여 URL을 통합
 urlpatterns = [
-    path('planner/create/', PlannerCreateAPIView.as_view(), name='planner-create'),
-    path('planner/list-create/', PlannerListCreateAPIView.as_view(), name='planner-list-create'),
-    path('planner/<int:pk>/', PlannerDetailAPIView.as_view(), name='planner-detail'),
-    path('planner/edit/<int:pk>/', PlannerEditAPIView.as_view(), name='planner-edit'),
-    path('planner/delete/<int:pk>/', PlannerDeleteAPIView.as_view(), name='planner-delete'),
-
-    path('period-event/create/', PeriodEventCreateAPIView.as_view(), name='period-event-create'),
-    path('period-event/list-create/', PeriodEventListCreateAPIView.as_view(), name='period-event-list-create'),
-    path('period-event/<int:pk>/', PeriodEventDetailAPIView.as_view(), name='period-event-detail'),
-    path('period-event/edit/<int:pk>/', PeriodEventEditAPIView.as_view(), name='period-event-edit'),
-    path('period-event/delete/<int:pk>/', PeriodEventDeleteAPIView.as_view(), name='period-event-delete'),
-
-    path('date-event/create/', DateEventCreateAPIView.as_view(), name='date-event-create'),
-    path('date-event/list-create/', DateEventListCreateAPIView.as_view(), name='date-event-list-create'),
-    path('date-event/<int:pk>/', DateEventDetailAPIView.as_view(), name='date-event-detail'),
-    path('date-event/edit/<int:pk>/', DateEventEditAPIView.as_view(), name='date-event-edit'),
-    path('date-event/delete/<int:pk>/', DateEventDeleteAPIView.as_view(), name='date-event-delete'),
-    
-    path('plannerList/', PlannerListAPIView.as_view(), name='planner-list'),
-
+    path('api/', include(router.urls)),
+    # 기존의 views를 위한 URL 패턴들
+    path('api/planner/list-create/', PlannerListCreateAPIView.as_view(), name='planner-list-create'),
+    path('api/planner/detail/<int:pk>/', PlannerDetailAPIView.as_view(), name='planner-detail')   
 ]
 
+'''
+Planner 
+api/planners/                   List 및 Create
+api/planners/<pk>/              Retrieve, Update, Destroy
+
+PeriodEvent         
+api/period-events/              List 및 Create
+api/period-events/<pk>/         Retrieve, Update, Destroy
+
+DateEvent  
+api/date-events/                List 및 Create
+api/date-events/<pk>/           Retrieve, Update, Destroy
+
+DateEventPlace ( 연결 ) 
+api/date-event-places/          List 및 Create
+api/date-event-places/<pk>/     Retrieve, Update, Destroy
+
+api/planner/list-create/
+api/planner/detail/<int:pk>/
+
+'''

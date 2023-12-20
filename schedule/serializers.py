@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Planner, PeriodEvent, DateEvent
+from .models import Planner, PeriodEvent, DateEvent, DateEventPlace
 
 class DateEventSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,4 +19,9 @@ class PlannerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Planner
+        fields = '__all__'
+        
+class DateEventPlaceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DateEventPlace
         fields = '__all__'

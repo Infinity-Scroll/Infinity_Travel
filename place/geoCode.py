@@ -1,24 +1,22 @@
-import requests
+import googlemaps
+from datetime import datetime
 
-def get_coordinates_from_address(address):
-    # Google Maps Geocoding API의 엔드포인트와 API 키를 설정
-    base_url = "https://maps.googleapis.com/maps/api/geocode/json"
-    api_key = "AIzaSyCUzWM4L4iAj-krLKiEx3MkD-j0HrqlNrs"
+# API 키와 라이브러리를 통해 객체 구성
+gmaps = googlemaps.Client(key='AIzaSyBPRAME5ZhySmydx9zsgIZwPkTD6MclT1Y')
 
-    # 주소를 이용하여 API에 요청을 보냄
-    params = {"address": address, "key": api_key}
-    response = requests.get(base_url, params=params)
-    data = response.json()
+'''
+# 주소를 받아 지오코딩하는 예
+geocode_result = gmaps.geocode('도쿄 센소지')
+'''
 
-    print(data["status"] + " 테스트용 좌표 0 ")
-    
-    # API 응답에서 좌표값 추출
-    if data["status"] == "OK":
-        location = data["results"][0]["geometry"]["location"]
-        print(location["lat"] + " 테스트용 좌표 1 ")
-        print(location["lng"] + " 테스트용 좌표 2 ")
-        latitude = location["lat"]
-        longitude = location["lng"]
-        return latitude, longitude
+# 주소를 입력받아 지오코딩 수행
+def get_coordinates(address):
+    geocode_result = gmaps.geocode(address)
+
+    # 결과가 있다면 첫 번째 결과의 좌표를 반환
+    if geocode_result:
+        location = geocode_result[0]['geometry']['location']
+        return location['lat'], location['lng']
     else:
+        print(f"{address}에 대한 좌표를 찾을 수 없습니다.")
         return None

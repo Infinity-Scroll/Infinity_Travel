@@ -1,26 +1,21 @@
-# place/admin.py
-
 from django.contrib import admin
-from django.utils.html import format_html
 from .models import Place
-from .geoCode import get_coordinates_from_address
+from .geoCode import get_coordinates
 
-@admin.register(Place)
 class PlaceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'address', 'category', 'display_photo')
-
-    def display_photo(self, obj):
-        return obj.photo.url if obj.photo else 'No Image'
-
-    display_photo.short_description = 'Photo'
+    list_display = ('name', 'description', 'address', 'category', 'contact', 'website', 'latitude', 'longitude')
+    search_fields = ('name', 'address', 'category')
 
     def save_model(self, request, obj, form, change):
-        # 주소가 입력되어 있고, 좌표값이 비어 있는 경우에만 자동으로 좌표값 생성
-        print ( " 제대로 작동하고 있는 지 테스트 ")
-        if obj.address and (not obj.latitude or not obj.longitude):
-            print ( " 제대로 작동하고 있는 지 테스트  2222222")
-            coordinates = get_coordinates_from_address(obj.address)
+        # 만약 좌표가 비어 있다면
+        if not obj.latitude and not obj.longitude and obj.address:
+            # 주소를 이용하여 좌표를 가져옴
+            coordinates = get_coordinates(obj.address)
+
             if coordinates:
                 obj.latitude, obj.longitude = coordinates
+
+        # 부모의 save_model 메서드 호출
         super().save_model(request, obj, form, change)
 
+admin.site.register(Place, PlaceAdmin)
