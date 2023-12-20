@@ -1,13 +1,13 @@
 from rest_framework import serializers
 from .models import User
 from django.contrib.auth.password_validation import validate_password
-import datetime
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.core.mail import EmailMessage
 from dotenv import load_dotenv
 import os
+import datetime
 
 load_dotenv()
 
@@ -51,3 +51,19 @@ class UserCreateSerializer(serializers.ModelSerializer):
         )
         email_message.send()
         return user
+
+
+class UserSerializer(serializers.ModelSerializer):
+    email = serializers.ReadOnlyField()
+
+    class Meta:
+        model = User
+        fields = ["email", "nickname", "profile_img", "introduce", "gender", "birth"]
+
+    def validate_birth(self, birth):
+        today = datetime.date.today()
+
+        if birth > today:
+            raise serializers.ValidationError("생년월일이 유효하지 않습니다.")
+
+        return birth

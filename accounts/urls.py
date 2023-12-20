@@ -1,10 +1,5 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter, SimpleRouter
+from django.urls import path
 from .views import *
-
-
-# router = DefaultRouter()
-# router.register("accounts", User)
 
 urlpatterns = [
     path("create/", UserCreateAPIView.as_view(), name="signup"),
@@ -15,4 +10,5 @@ urlpatterns = [
         EmailVerificationView.as_view(),
         name="verify-email",
     ),
+    path("", UserAPIView.as_view(), name="user"),
 ]
