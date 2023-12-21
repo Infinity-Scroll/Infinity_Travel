@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Place
+from .models import Places
 from .geoCode import get_coordinates
 
 class PlaceAdmin(admin.ModelAdmin):
@@ -18,4 +18,4 @@ class PlaceAdmin(admin.ModelAdmin):
         # 부모의 save_model 메서드 호출
         super().save_model(request, obj, form, change)
 
-admin.site.register(Place, PlaceAdmin)
+admin.site.register(Places, PlaceAdmin)
