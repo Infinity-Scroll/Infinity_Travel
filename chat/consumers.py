@@ -1,5 +1,5 @@
 import json
-from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 from django.contrib.auth import get_user_model
 from channels.db import database_sync_to_async
 from .models import *
@@ -11,13 +11,16 @@ User = get_user_model()
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         user = await get_user_from_cookie(self)
-        user2 = await get_user2_from_roomname(self)
-        room = await get_room(user, user2)
+        room_name = self.scope["url_route"]["kwargs"]["room_name"]
+        room = await get_room(room_name)
+
+        if room is None:
+            await self.close()
+
         self.scope["user"] = user
-        self.scope["user2"] = user2
         self.scope["room"] = room
 
-        self.room_name = f"{min(user.pk, user2.pk)}_{max(user.pk, user2.pk)}"
+        self.room_name = f"{room_name}"
         self.room_group_name = f"chat_{self.room_name}"
         # 그룹 입장
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)

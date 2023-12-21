@@ -11,7 +11,7 @@
     <input id="chat-message-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
     {{ "room-name 입력" }}
-    <input type="text" id="room-name" value="to_7">
+    <input type="text" id="room-name" value="YI8JHDOBPQRK9YS5DRV4">
     <div>
         <span>내이름: <span class="myname"></span></span>
     </div>
@@ -54,7 +54,7 @@
     let currentPage = 1;
     async function loadChatHistory() {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/chat/6_7/?page=${currentPage}`, {
+            const response = await fetch(`http://127.0.0.1:8000/chat/${roomName}/?page=${currentPage}`, {
                 method: "GET",  // GET 메서드로 변경
                 headers: {
                     "Content-Type": "application/json",
@@ -93,7 +93,7 @@
     chatSocket.onmessage = function (e) {
         e.preventDefault();
         const data = JSON.parse(e.data);
-        document.querySelector('#chat-log').value += (data.username + ': ' + data.message + '\n');
+        document.querySelector('#chat-log').value += (data.username + ': ' + data.message.message + '\n');
         myname.innerHTML = data.username
         console.log(data)
     };

@@ -13,17 +13,9 @@ def get_user(user_id):
 
 
 @database_sync_to_async
-def get_user2_from_roomname(self):
-    roomname = self.scope["url_route"]["kwargs"]["room_name"]
-    _, user2 = roomname.split("_")
-    user2 = get_object_or_404(User, pk=user2)
-    return user2
-
-
-@database_sync_to_async
 def save_message(room, user, message):
     try:
-        message = Message.objects.create(user=user, room=room, message=message)
+        message = Messages.objects.create(user=user, room=room, message=message)
     except Exception as e:
         print("생성실패", e)
     return {
@@ -31,7 +23,7 @@ def save_message(room, user, message):
         "user": user.id,
         "roomname": room.room_name,
         "message": message.message,
-        # 'userprofile' : user.profileimg.url,  프로필이미지
+        "userprofile": user.image_url.url if user.image_url else None,
         "username": user.nickname,
         "created_at": str(message.created_at),
     }
@@ -50,15 +42,12 @@ async def get_user_from_cookie(self):
 
 
 @database_sync_to_async
-def get_room(user, user2):
-    room_name = f"{min(user.pk, user2.pk)}_{max(user.pk, user2.pk)}"
+def get_room(room_name):
     try:
-        room = Room.objects.get(room_name=room_name)
-        room.invisible.clear()
-    except Room.DoesNotExist:
-        # 해당 room_name의 방이 없으면 새로 생성
-        room = Room.objects.create(room_name=room_name)
-        print("room 생성 성공")
-        room.member.add(user, user2)
-        print("생성된 room에 user1, user2 추가")
+        room = Rooms.objects.get(room_name=room_name)
+        room_members = Room_members.objects.filter(room=room)
+
+        room_members.update(is_visibled=True)
+    except Rooms.DoesNotExist:
+        return None
     return room
