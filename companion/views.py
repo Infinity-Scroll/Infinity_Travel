@@ -1,39 +1,51 @@
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from .models import Companion, Comment, Tag
-from .serializers import CompanionSerializer, CommentSerializer, TagSerializer
-from .permissions import IsOwnerOrReadOnly
-from core.permissons import JWTCookieIsOwnerorReadOnly
+from .models import Companions, Comments
+from accounts.models import Users
+from .serializers import CompanionSerializer, CommentSerializer
+from core.permissons import JWTCookieAuthenticated
 
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
 
 
 class CompanionViewSet(viewsets.ModelViewSet):
-    queryset = Companion.objects.all()
+    queryset = Companions.objects.all()
     serializer_class = CompanionSerializer
 
-    # JWTAuthentication 적용
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [JWTCookieIsOwnerorReadOnly]
-
-    # JWTAuthentication 적용하지 않는 액션들에 대한 decorator
-    @action(detail=False, methods=['get'])
-    def list_without_auth(self, request):
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-    @action(detail=True, methods=['get'])
-    def retrieve_without_auth(self, request, pk=None):
+    def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
+        instance.increase_views()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            permission_classes = [IsAuthenticated, JWTCookieAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+
+    def perform_create(self, serializer):
+        serializer.save(user_id=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.user_id.id != self.request.user.id:
+            return Response({'detail': '본인의 글만 수정할 수 있습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        return super().update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.user_id.id != self.request.user.id:
+            return Response({'detail': '본인의 글만 삭제할 수 있습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @ensure_csrf_cookie
@@ -43,11 +55,29 @@ def my_view(request):
     return response
 
 
-class TagViewSet(viewsets.ModelViewSet):
-    queryset = Tag.objects.all()
-    serializer_class = TagSerializer
-
-
 class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
+    queryset = Comments.objects.all()
     serializer_class = CommentSerializer
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            permission_classes = [IsAuthenticated, JWTCookieAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+
+    def perform_create(self, serializer):
+        serializer.save(user_id=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.user_id.id != self.request.user.id:
+            return Response({'detail': '본인의 댓글만 수정할 수 있습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        return super().update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.user_id.id != self.request.user.id:
+            return Response({'detail': '본인의 댓글만 삭제할 수 있습니다.'}, status=status.HTTP_403_FORBIDDEN)
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)

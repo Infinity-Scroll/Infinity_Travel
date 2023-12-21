@@ -1,21 +1,28 @@
 from rest_framework import serializers
-from .models import Companion, Tag, Comment
+from .models import Companions, Comments
+from datetime import date
 
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = ('id', 'tag')
-
+def determine_age_group(age):
+    if age < 20:
+        return "10대이하"
+    elif 20 <= age < 30:
+        return "20대"
+    elif 30 <= age < 40:
+        return "30대"
+    elif 40 <= age:
+        return "40대이상"
 
 class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comments
+        fields = ('id', 'companion_post', 'comment_text', 'replies', 'parent_comment', 'user', 'user_nickname')
+
+    user = serializers.IntegerField(source='user_id.id', read_only=True)
+    user_nickname = serializers.CharField(source='user_id.nickname', read_only=True)
     replies = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Comment
-        fields = ('id', 'companion_post', 'comment_text', 'replies', 'parent_comment')
-
     def get_replies(self, obj):
-        replies = Comment.objects.filter(parent_comment=obj.id)
+        replies = Comments.objects.filter(parent_comment=obj.id)
         serializer = CommentSerializer(replies, many=True)
         return serializer.data
     
@@ -30,30 +37,31 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class CompanionSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True)
-    comments = CommentSerializer(many=True, read_only=True)
-
     class Meta:
-        model = Companion
-        fields = ('id', 'area', 'title', 'content', 'tags', 'comments', 'schedule_start', 'schedule_end', 'views')
+        model = Companions
+        fields = ('id', 'area', 'title', 'content', 'comments', 'start_date', 'end_date', 'views', 'age_tag', 'user', 'user_nickname', 'created_at', 'updated_at')
 
-    def create(self, validated_data):
-        tags_data = validated_data.pop('tags')
-        companion = Companion.objects.create(**validated_data)
-        for tag_data in tags_data:
-            tag, _ = Tag.objects.get_or_create(**tag_data)
-            companion.tags.add(*tag)
-        return companion
+    comments = CommentSerializer(many=True, read_only=True)
+    user = serializers.IntegerField(source='user_id.id', read_only=True)
+    user_nickname = serializers.CharField(source='user_id.nickname', read_only=True)
+    views = serializers.ReadOnlyField()
+    age_tag = serializers.SerializerMethodField()
 
-    # def create(self, validated_data):
-    #     tags_data = validated_data.pop('tags')
-    #     existing_tags = []
+    def get_age_tag(self, obj):
+        birth_date = obj.user_id.birth
+        today = date.today()
+        age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+        age_group = determine_age_group(age)
+        return age_group
 
-    #     for tag_data in tags_data:
-    #         tag_name = tag_data['name']
-    #         tag, created = Tag.objects.get_or_create(name=tag_name)
-    #         existing_tags.append(tag)
+    # local_tag = serializers.SerializerMethodField()
 
-    #     companion = Companion.objects.create(**validated_data)
-    #     companion.tags.add(*existing_tags)
-    #     return companion
+    # def get_local_tag(self, obj):
+    #     local = obj.owner.local
+    #     return local
+
+    # gender_tag = serializers.SerializerMethodField()
+
+    # def get_gender_tag(self, obj):
+    #     gender = obj.owner.gender
+    #     return gender

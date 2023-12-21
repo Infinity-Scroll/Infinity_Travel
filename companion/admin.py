@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Companion, Comment, Tag
+from .models import Companions, Comments
 
-admin.site.register(Companion)
-admin.site.register(Comment)
-admin.site.register(Tag)
+admin.site.register(Companions)
+admin.site.register(Comments)
