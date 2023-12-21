@@ -1,12 +1,15 @@
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework import generics, status, mixins
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from rest_framework import generics, status
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from .models import User
-from .serializers import UserCreateSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework.views import APIView
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+from .models import User
+from .serializers import UserCreateSerializer, UserSerializer
+from .utils import generate_random_nickname
 from core.permissions import get_user_id
 
 
@@ -16,13 +19,17 @@ class UserCreateAPIView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
+        # 닉네임이 없는 경우 랜덤 닉네임 생성.
+        if "nickname" not in request.data:
+            request.data["nickname"] = generate_random_nickname()
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
 
-        response = {"email": serializer.data["email"], "message": "회원가입에 성공하였습니다."}
-        return Response(response, status=status.HTTP_201_CREATED, headers=headers)
+        response = {"message": "이메일 인증을 통해 회원가입을 진행해주세요."}
+        return Response(response, status=status.HTTP_200_OK, headers=headers)
 
 
 class LoginView(TokenObtainPairView):
@@ -56,9 +63,53 @@ class RefreshTokenView(TokenRefreshView):
         return response
 
 
-class TestView(APIView):
+class UserAPIView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = UserSerializer
+
     def get(self, request):
         user_id = get_user_id(request)
+        user = User.objects.get(pk=user_id)
+        serializer = self.serializer_class(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-        print("user_id:", user_id)  # user_id: 1
-        return Response({"message": "Accepted"})
+    def patch(self, request):
+        user_id = get_user_id(request)
+        user = User.objects.get(pk=user_id)
+        serializer = self.serializer_class(user, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        user_id = get_user_id(request)
+        user = User.objects.get(pk=user_id)
+        self.perform_destroy(user)
+        return Response(
+            {"message": "회원탈퇴가 완료되었습니다. 이용해주셔서 감사합니다."},
+            status=status.HTTP_204_NO_CONTENT,
+        )
+
+
+class EmailVerificationView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, uidb64, token):
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.save()
+            return Response(
+                {"email": user.email, "message": "회원가입에 성공하였습니다!"},
+                status=status.HTTP_201_CREATED,
+            )
+        else:
+            return Response(
+                {"message": "URL오류입니다."}, status=status.HTTP_400_BAD_REQUEST
+            )

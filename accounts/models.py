@@ -8,9 +8,11 @@ from core.models import TimestampedModel
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, gender, nickname, birth, password=None):
+    def create_user(
+        self, email, gender, nickname, birth, password=None, **extra_fields
+    ):
         if email == None:
-            raise TypeError("이메일 필수값입니다.")
+            raise TypeError("이메일은 필수값입니다.")
         if password is None:
             raise TypeError("비밀번호는 필수값입니다.")
 
@@ -19,6 +21,7 @@ class UserManager(BaseUserManager):
             gender=gender,
             nickname=nickname,
             birth=birth,
+            **extra_fields,
         )
 
         user.set_password(password)
@@ -42,14 +45,11 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     USERNAME_FIELD = "email"
-    GENDER = [
-        ("Male", "남자"),
-        ("Female", "여자"),
-    ]
+    GENDER = [("Male", "남자"), ("Female", "여자"), ("None", "선택없음")]
     gender = models.CharField(max_length=6, choices=GENDER)
     nickname = models.CharField(max_length=20)
     birth = models.DateField()
-    introduce = models.TextField()
+    introduction = models.TextField()
     image_url = models.ImageField(upload_to="accounts/image_url/%y/%m%d", blank=True)
     REQUIRED_FIELDS = ["password", "gender", "nickname", "birth"]
 
