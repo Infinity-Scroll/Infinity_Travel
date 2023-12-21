@@ -12,14 +12,6 @@ def get_user(user_id):
     return User.objects.get(pk=user_id)
 
 
-# @database_sync_to_async
-# def get_user2_from_roomname(self):
-#     roomname = self.scope["url_route"]["kwargs"]["room_name"]
-#     _, user2 = roomname.split("_")
-#     user2 = get_object_or_404(User, pk=user2)
-#     return user2
-
-
 @database_sync_to_async
 def save_message(room, user, message):
     try:
@@ -31,7 +23,7 @@ def save_message(room, user, message):
         "user": user.id,
         "roomname": room.room_name,
         "message": message.message,
-        # "userprofile": user.image_url.url,
+        "userprofile": user.image_url.url if user.image_url else None,
         "username": user.nickname,
         "created_at": str(message.created_at),
     }

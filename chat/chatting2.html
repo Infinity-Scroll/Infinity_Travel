@@ -93,7 +93,7 @@
     chatSocket.onmessage = function (e) {
         e.preventDefault();
         const data = JSON.parse(e.data);
-        document.querySelector('#chat-log').value += (data.username + ': ' + data.message + '\n');
+        document.querySelector('#chat-log').value += (data.username + ': ' + data.message.message + '\n');
         myname.innerHTML = data.username
         console.log(data)
     };

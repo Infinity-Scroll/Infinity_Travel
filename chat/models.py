@@ -14,7 +14,6 @@ class Room_members(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="member")
     room = models.ForeignKey(Rooms, on_delete=models.CASCADE, related_name="visibility")
     is_visibled = models.BooleanField(default=True)
-    # 유저별 방이름
 
 
 class Messages(models.Model):
