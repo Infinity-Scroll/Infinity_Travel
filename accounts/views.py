@@ -103,7 +103,6 @@ class EmailVerificationView(APIView):
             user = None
 
         if user is not None and default_token_generator.check_token(user, token):
-            # 토큰이 유효하면 사용자를 활성화하고 로그인합니다.
             user.is_active = True
             user.save()
             return Response(
@@ -114,6 +113,3 @@ class EmailVerificationView(APIView):
             return Response(
                 {"message": "URL오류입니다."}, status=status.HTTP_400_BAD_REQUEST
             )
-
-
-# 유저상세//수정, 랜덤 닉네임, 소셜로그인

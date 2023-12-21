@@ -58,7 +58,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["email", "nickname", "profile_img", "introduce", "gender", "birth"]
+        fields = ["email", "nickname", "image_url", "introduction", "gender", "birth"]
 
     def validate_birth(self, birth):
         today = datetime.date.today()
