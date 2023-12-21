@@ -32,17 +32,17 @@ class CompanionViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
-        serializer.save(user_id=self.request.user)
+        serializer.save(user=self.request.user)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        if instance.user_id.id != self.request.user.id:
+        if instance.user.id != self.request.user.id:
             return Response({'detail': '본인의 글만 수정할 수 있습니다.'}, status=status.HTTP_403_FORBIDDEN)
         return super().update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        if instance.user_id.id != self.request.user.id:
+        if instance.user.id != self.request.user.id:
             return Response({'detail': '본인의 글만 삭제할 수 있습니다.'}, status=status.HTTP_403_FORBIDDEN)
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -67,17 +67,17 @@ class CommentViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def perform_create(self, serializer):
-        serializer.save(user_id=self.request.user)
+        serializer.save(user=self.request.user)
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        if instance.user_id.id != self.request.user.id:
+        if instance.user.id != self.request.user.id:
             return Response({'detail': '본인의 댓글만 수정할 수 있습니다.'}, status=status.HTTP_403_FORBIDDEN)
         return super().update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        if instance.user_id.id != self.request.user.id:
+        if instance.user.id != self.request.user.id:
             return Response({'detail': '본인의 댓글만 삭제할 수 있습니다.'}, status=status.HTTP_403_FORBIDDEN)
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -17,8 +17,8 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comments
         fields = ('id', 'companion_post', 'comment_text', 'replies', 'parent_comment', 'user', 'user_nickname')
 
-    user = serializers.IntegerField(source='user_id.id', read_only=True)
-    user_nickname = serializers.CharField(source='user_id.nickname', read_only=True)
+    user = serializers.IntegerField(source='user.id', read_only=True)
+    user_nickname = serializers.CharField(source='user.nickname', read_only=True)
     replies = serializers.SerializerMethodField()
 
     def get_replies(self, obj):
@@ -39,16 +39,15 @@ class CommentSerializer(serializers.ModelSerializer):
 class CompanionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Companions
-        fields = ('id', 'area', 'title', 'content', 'comments', 'start_date', 'end_date', 'views', 'age_tag', 'user', 'user_nickname', 'created_at', 'updated_at')
+        fields = ('id', 'area', 'title', 'content', 'comments', 'start_date', 'end_date', 'views', 'age_tag', 'user_nickname', 'created_at', 'updated_at')
 
     comments = CommentSerializer(many=True, read_only=True)
-    user = serializers.IntegerField(source='user_id.id', read_only=True)
-    user_nickname = serializers.CharField(source='user_id.nickname', read_only=True)
+    user_nickname = serializers.CharField(source='user.nickname', read_only=True)
     views = serializers.ReadOnlyField()
     age_tag = serializers.SerializerMethodField()
 
     def get_age_tag(self, obj):
-        birth_date = obj.user_id.birth
+        birth_date = obj.user.birth
         today = date.today()
         age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
         age_group = determine_age_group(age)
