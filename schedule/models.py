@@ -1,5 +1,3 @@
-# models.py
-
 from django.db import models
 from place.models import Places
 from django.conf import settings

@@ -1,6 +1,5 @@
 from rest_framework import generics, viewsets
 from rest_framework.permissions import AllowAny
-# from .permissions import IsOwnerOrReadOnlySchedule, IsOwnerOrReadOnlyPeriodEvent, IsOwnerOrReadOnlyDateEvent
 from core.permissions import IsOwner, JWTCookieAuthenticated, JWTCookieIsOwnerorReadOnly
 from .models import Planners, PeriodEvents, DateEvents, DateEventPlaces
 from .serializers import (
