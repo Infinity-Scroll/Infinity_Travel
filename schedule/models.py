@@ -11,7 +11,7 @@ class Planners(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 작성자 
 
     def __str__(self):
-        return self.title
+        return f"{self.pk} - {self.name}"
 
 class PeriodEvents(models.Model):
     planner = models.ForeignKey(Planners, related_name='period_events', on_delete=models.CASCADE)
@@ -20,7 +20,7 @@ class PeriodEvents(models.Model):
     end_date = models.DateField()
 
     def __str__(self):
-        return self.title
+        return f"{self.planner.pk} - {self.pk}"
 
 class DateEvents(models.Model):
     period_event = models.ForeignKey(PeriodEvents, related_name='date_events', on_delete=models.CASCADE)
@@ -28,11 +28,11 @@ class DateEvents(models.Model):
     place = models.ManyToManyField(Places, related_name='date_events', blank=True)
 
     def __str__(self):
-        return f"{self.period_event.title} - {self.event_date}"
+        return f"{self.period_event.pk} - {self.event_date}"
 
 class DateEventPlaces(models.Model):
     date_event = models.ForeignKey(DateEvents, related_name='date_event_places', on_delete=models.CASCADE)
     order = models.IntegerField()
     place = models.ForeignKey(Places, related_name='date_event_places', on_delete=models.CASCADE)
     def __str__(self):
-        return f"{self.date_event} - {self.place}"
+        return f"{self.order} - {self.date_event} - {self.place}"

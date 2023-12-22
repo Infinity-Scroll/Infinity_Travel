@@ -1,6 +1,7 @@
 from rest_framework.permissions import BasePermission
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions
 
 
 class IsOwner(BasePermission):
@@ -46,10 +47,17 @@ class JWTCookieIsOwnerorReadOnly(BasePermission):
 
         user = get_user_id(request)
 
-        return obj.owner == user
+        return obj.user.pk == user
 
 
 def get_user_id(request):
     token = AccessToken(request.COOKIES.get("access_token"))
     user_id = token.payload["user_id"]
     return user_id
+
+class IsOwnerOrReadOnly(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return obj.user == request.user
