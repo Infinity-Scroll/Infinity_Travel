@@ -13,8 +13,8 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # 로컬 라이브러리 임포트
-from .models import Companions, Comments
-from .serializers import CompanionSerializer, CommentSerializer
+from .models import Companions, Companion_Comments
+from .serializers import CompanionSerializer, Companion_CommentSerializer
 from accounts.models import User
 from core.permissions import JWTCookieAuthenticated
 
@@ -52,9 +52,9 @@ class CompanionViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comments.objects.all()
-    serializer_class = CommentSerializer
+class Companion_CommentViewSet(viewsets.ModelViewSet):
+    queryset = Companion_Comments.objects.all()
+    serializer_class = Companion_CommentSerializer
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:

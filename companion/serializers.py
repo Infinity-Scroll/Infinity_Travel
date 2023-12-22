@@ -1,10 +1,10 @@
 from datetime import date
 from rest_framework import serializers
-from .models import Companions, Comments
+from .models import Companions, Companion_Comments
 
-class CommentSerializer(serializers.ModelSerializer):
+class Companion_CommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Comments
+        model = Companion_Comments
         fields = ('id', 'companion_post', 'comment_text', 'replies', 'parent_comment', 'user', 'user_nickname')
 
     user = serializers.IntegerField(source='user.id', read_only=True)
@@ -12,8 +12,8 @@ class CommentSerializer(serializers.ModelSerializer):
     replies = serializers.SerializerMethodField()
 
     def get_replies(self, obj):
-        replies = Comments.objects.filter(parent_comment=obj.id)
-        serializer = CommentSerializer(replies, many=True)
+        replies = Companion_Comments.objects.filter(parent_comment=obj.id)
+        serializer = Companion_CommentSerializer(replies, many=True)
         return serializer.data
     
     def validate(self, data):
@@ -29,9 +29,9 @@ class CommentSerializer(serializers.ModelSerializer):
 class CompanionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Companions
-        fields = ('id', 'area', 'title', 'content', 'comments', 'start_date', 'end_date', 'views', 'age_tag', 'user_nickname', 'created_at', 'updated_at')
+        fields = ('id', 'area', 'title', 'content', 'comments', 'start_date', 'end_date', 'views', 'age_tag', 'user_nickname', 'created_at', 'updated_at', 'status')
 
-    comments = CommentSerializer(many=True, read_only=True)
+    comments = Companion_CommentSerializer(many=True, read_only=True)
     user_nickname = serializers.CharField(source='user.nickname', read_only=True)
     views = serializers.ReadOnlyField()
     age_tag = serializers.SerializerMethodField()
