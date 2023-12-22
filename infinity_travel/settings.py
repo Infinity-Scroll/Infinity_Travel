@@ -4,12 +4,14 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+env = os.environ.get
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY")
 
-DEBUG = os.environ.get("DEBUG")
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = ["*"]
 
@@ -67,7 +69,7 @@ TEMPLATES = [
 WSGI_APPLICATION = "infinity_travel.wsgi.application"
 ASGI_APPLICATION = "infinity_travel.asgi.application"
 
-REDIS = os.environ.get("REDIS")
+REDIS = env("REDIS")
 
 if REDIS:
     CHANNEL_LAYERS = {
@@ -76,11 +78,11 @@ if REDIS:
             "CONFIG": {
                 "hosts": [
                     {
-                        "host": "127.0.0.1",
-                        "port": 6379,
+                        "host": env("REDIS_CLOUD_HOST"),
+                        "port": env("REDIS_CLOUD_PORT"),
                         # password: ###
-                        # "host": os.environ.get('REDIS_CLOUD_HOST'),
-                        # "port": os.environ.get('REDIS_CLOUD_PORT') or 6379,
+                        # "host": env('REDIS_CLOUD_HOST'),
+                        # "port": env('REDIS_CLOUD_PORT') or 6379,
                     }
                 ],
             },
@@ -184,9 +186,9 @@ SPECTACULAR_SETTINGS = {
 }
 
 
-EMAIL_HOST = os.environ.get("EMAIL_HOST")
-EMAIL_PORT = os.environ.get("EMAIL_PORT")
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
-DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
