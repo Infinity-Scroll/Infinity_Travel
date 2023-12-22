@@ -10,7 +10,7 @@ from .serializers import (
 # CUD의 경우는 작성자만 가능하도록 변경
 class JWTCookieIsOwnerOrReadOnlyMixin:
     def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        if getattr(self, 'action', None) in ['create', 'update', 'partial_update', 'destroy']:
             return [JWTCookieIsOwnerorReadOnly()]
         return [AllowAny()]
 

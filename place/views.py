@@ -7,7 +7,7 @@ from core.permissions import *
 
 class JWTCookieIsOwnerOrReadOnlyMixin:
     def get_permissions(self):
-        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+        if getattr(self, 'action', None) in ['create', 'update', 'partial_update', 'destroy']:
             return [JWTCookieIsOwnerorReadOnly()]
         return [AllowAny()]
 class PlaceViewSet(JWTCookieIsOwnerOrReadOnlyMixin, viewsets.ModelViewSet):
