@@ -1,7 +1,5 @@
 from rest_framework.permissions import BasePermission
 from rest_framework_simplejwt.tokens import AccessToken
-
-
 from rest_framework.permissions import IsAuthenticated
 
 
