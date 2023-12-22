@@ -44,10 +44,10 @@ class Companions(TimestampedModel, AreaModel):
         ordering = ['-created_at']
 
 
-class Comments(models.Model):
+class Companion_Comments(models.Model):
     comment_text = models.TextField()
-    parent_comment = models.ForeignKey('self', related_name='replies', null=True, blank=True, on_delete=models.CASCADE)
-    companion_post = models.ForeignKey(Companions, related_name='comments', on_delete=models.CASCADE)
+    parent_comment = models.ForeignKey('self', related_name='companion_replies', null=True, blank=True, on_delete=models.CASCADE)
+    companion_post = models.ForeignKey(Companions, related_name='companion_comments', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
