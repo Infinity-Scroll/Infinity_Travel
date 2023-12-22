@@ -14,6 +14,7 @@ class Places(models.Model):
     longitude = models.FloatField(blank=True, null=True,editable=False)
     rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(6)])
 
+    # 만약 api 쪽 에러가나면 어떻게 처리하고 있어요. 가 필요할듯
     def save(self, *args, **kwargs):
         # 만약 주소가 비어 있다면
         if not self.latitude and not self.longitude and self.address:
@@ -34,7 +35,7 @@ class Places(models.Model):
         app_label = 'place'
         
         
-class Comments(models.Model):
+class Place_comments(models.Model):
     place = models.ForeignKey(Places, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField()
