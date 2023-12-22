@@ -16,7 +16,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from .models import Companions, Comments
 from .serializers import CompanionSerializer, CommentSerializer
 from accounts.models import User
-from core.permissons import JWTCookieAuthenticated
+from core.permissions import JWTCookieAuthenticated
 
 class CompanionViewSet(viewsets.ModelViewSet):
     queryset = Companions.objects.all()

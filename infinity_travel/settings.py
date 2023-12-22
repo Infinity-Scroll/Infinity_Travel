@@ -35,6 +35,8 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    "channels",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -48,9 +50,11 @@ INSTALLED_APPS = [
     # my app
     "accounts",
     'companion',
+    "chat",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -80,10 +84,30 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "infinity_travel.wsgi.application"
+ASGI_APPLICATION = "infinity_travel.asgi.application"
 
+REDIS = os.environ.get("REDIS")
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+if REDIS:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [
+                    {
+                        "host": "127.0.0.1",
+                        "port": 6379,
+                        # password: ###
+                        # "host": os.environ.get('REDIS_CLOUD_HOST'),
+                        # "port": os.environ.get('REDIS_CLOUD_PORT') or 6379,
+                    }
+                ],
+            },
+        },
+    }
+else:
+    CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
+
 
 DATABASES = {
     "default": {
@@ -92,9 +116,6 @@ DATABASES = {
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -136,7 +157,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "core.permissions.JWTCookieAuthenticated",  # 쿠키값으로 인증
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         # 'rest_framework.permissions.AllowAny', # 누구나 접근
@@ -150,7 +171,7 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(hours=2),
     # 'ROTATE_REFRESH_TOKENS': False,
     # 'BLACKLIST_AFTER_ROTATION': False,
@@ -179,8 +200,8 @@ SIMPLE_JWT = {
 AUTH_USER_MODEL = "accounts.User"
 
 # 배포 시 설정변경
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True  # <-쿠키가 cross-site HTTP 요청에 포함될 수 있다
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "InfinifyTravel Project API Document",
@@ -191,3 +212,11 @@ SPECTACULAR_SETTINGS = {
     # },
     "VERSION": "1.0.0",
 }
+
+
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_PORT = os.environ.get("EMAIL_PORT")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
