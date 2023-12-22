@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import Places, Comments
+from .models import Places, Place_comments
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Comments
+        model = Place_comments
         fields = ['place','user','content', 'rating']
 
 class PlaceSerializer(serializers.ModelSerializer):

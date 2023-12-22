@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .models import Places, Comments
+from .models import Places, Place_comments
 from .serializers import PlaceSerializer, CommentSerializer
 from rest_framework.permissions import AllowAny
 from django.shortcuts import render, redirect
@@ -15,5 +15,5 @@ class PlaceViewSet(JWTCookieIsOwnerOrReadOnlyMixin, viewsets.ModelViewSet):
     serializer_class = PlaceSerializer
     
 class CommentViewSet(JWTCookieIsOwnerOrReadOnlyMixin, viewsets.ModelViewSet):
-    queryset = Comments.objects.all()
+    queryset = Place_comments.objects.all()
     serializer_class = CommentSerializer
