@@ -1,3 +1,10 @@
+# 파이썬 표준 라이브러리 업로드
+
+# 코어 장고 임포트
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import JsonResponse
+
+# 서드 파티 라이브러리 임포트
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.authentication import SessionAuthentication
@@ -5,14 +12,11 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+# 로컬 라이브러리 임포트
 from .models import Companions, Comments
-from accounts.models import Users
 from .serializers import CompanionSerializer, CommentSerializer
+from accounts.models import User
 from core.permissons import JWTCookieAuthenticated
-
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.http import JsonResponse
-
 
 class CompanionViewSet(viewsets.ModelViewSet):
     queryset = Companions.objects.all()
@@ -46,13 +50,6 @@ class CompanionViewSet(viewsets.ModelViewSet):
             return Response({'detail': '본인의 글만 삭제할 수 있습니다.'}, status=status.HTTP_403_FORBIDDEN)
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-@ensure_csrf_cookie
-def my_view(request):
-    response = JsonResponse({'key': 'value'})
-    response['Access-Control-Allow-Origin'] = '*'  # 이 부분을 요청하는 도메인에 맞게 수정
-    return response
 
 
 class CommentViewSet(viewsets.ModelViewSet):

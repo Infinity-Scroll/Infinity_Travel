@@ -1,16 +1,6 @@
+from datetime import date
 from rest_framework import serializers
 from .models import Companions, Comments
-from datetime import date
-
-def determine_age_group(age):
-    if age < 20:
-        return "10대이하"
-    elif 20 <= age < 30:
-        return "20대"
-    elif 30 <= age < 40:
-        return "30대"
-    elif 40 <= age:
-        return "40대이상"
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,11 +36,22 @@ class CompanionSerializer(serializers.ModelSerializer):
     views = serializers.ReadOnlyField()
     age_tag = serializers.SerializerMethodField()
 
+    @staticmethod
+    def determine_age_group(age):
+        if age < 20:
+            return "10대이하"
+        elif 20 <= age < 30:
+            return "20대"
+        elif 30 <= age < 40:
+            return "30대"
+        elif 40 <= age:
+            return "40대이상"
+
     def get_age_tag(self, obj):
         birth_date = obj.user.birth
         today = date.today()
         age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
-        age_group = determine_age_group(age)
+        age_group = self.determine_age_group(age)
         return age_group
 
     # local_tag = serializers.SerializerMethodField()

@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from accounts.models import Users
+from accounts.models import User
 from core.models import TimestampedModel, AreaModel
 
 class LimitedURLField(models.URLField):
@@ -27,7 +27,7 @@ class Companions(TimestampedModel, AreaModel):
     end_date = models.DateField()
     image = models.ImageField(null=True, blank=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='A', blank=True)
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     companion_recruits = models.IntegerField(default=2, null=False)
     current_member = models.IntegerField(default=1, null=False)
     thumbnail_image_url = models.URLField(max_length=200, blank=True, null=True) # , default="기본 썸네일 URL")
@@ -48,7 +48,7 @@ class Comments(models.Model):
     comment_text = models.TextField()
     parent_comment = models.ForeignKey('self', related_name='replies', null=True, blank=True, on_delete=models.CASCADE)
     companion_post = models.ForeignKey(Companions, related_name='comments', on_delete=models.CASCADE)
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.comment_text
