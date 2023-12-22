@@ -1,12 +1,15 @@
+from .models import Rooms, Messages, Room_members
+from .serializers import *
+
+from django.shortcuts import get_object_or_404
+
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
+
 from core.permissions import get_user_id
-from django.shortcuts import get_object_or_404
-from .models import Rooms, Messages, Room_members
-from .serializers import *
 
 
 class RoomListAPIView(generics.ListAPIView):
@@ -71,6 +74,3 @@ class MessageListAPIView(generics.ListAPIView):
         room = get_object_or_404(Rooms, room_name=room_name)
         queryset = Messages.objects.filter(room=room).order_by("-created_at")
         return queryset
-
-
-## 채팅에서 메세지 생성 시 유저 사라지는 문제
