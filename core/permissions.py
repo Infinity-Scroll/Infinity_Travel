@@ -46,7 +46,7 @@ class JWTCookieIsOwnerorReadOnly(BasePermission):
 
         user = get_user_id(request)
 
-        return obj.owner == user
+        return obj.user.pk == user
 
 
 def get_user_id(request):
