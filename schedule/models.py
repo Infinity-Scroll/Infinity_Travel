@@ -9,7 +9,7 @@ class Planners(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     public_flag = models.BooleanField(default=True) # 공개 여부 플래그 
-    area = models
+    area = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # 작성자 
 
     def __str__(self):
@@ -33,8 +33,8 @@ class DateEvents(models.Model):
         return f"{self.period_event.title} - {self.event_date}"
 
 class DateEventPlaces(models.Model):
-    order = models.IntegerField()
     date_event = models.ForeignKey(DateEvents, related_name='date_event_places', on_delete=models.CASCADE)
+    order = models.IntegerField()
     place = models.ForeignKey(Places, related_name='date_event_places', on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.date_event} - {self.place}"

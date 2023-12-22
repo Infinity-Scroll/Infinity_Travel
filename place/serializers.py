@@ -4,11 +4,11 @@ from .models import Places, Comments
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
-        fields = '__all__'
+        fields = ['place','user','content', 'rating']
 
 class PlaceSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Places
-        fields = '__all__'
+        fields = ['name', 'description', 'address', 'category', 'contact', 'website', 'image_url', 'latitude', 'longitude', 'rating']
