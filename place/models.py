@@ -1,6 +1,7 @@
 from django.db import models
 from .geoCode import get_coordinates
 from django.conf import settings
+from django.contrib.auth.models import User
 
 class Places(models.Model):
     name = models.CharField(max_length=255, null=False)
@@ -39,8 +40,8 @@ class Place_comments(models.Model):
     place = models.ForeignKey(Places, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField()
-    rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(6)])  # 0 to 5 rating
+    rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(6)])
 
     def __str__(self):
-        return f"{self.author}'s commen t on {self.place.name}"
+        return f"{self.user}'s comment on {self.place.name}"
 
