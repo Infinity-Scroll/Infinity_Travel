@@ -18,11 +18,11 @@ class RoomListAPIView(generics.ListAPIView):
     def get_queryset(self):
         user_id = get_user_id(self.request)
 
-        return (
-            Rooms.objects.filter(visibility__user=user_id)
-            .exclude(visibility__is_visibled=False)
-            .order_by("-updated_at")
+        queryset = Rooms.objects.filter(
+            visibility__user=user_id, visibility__is_visibled=True
         )
+
+        return queryset
 
 
 class RoomCreateAPIView(generics.CreateAPIView):
