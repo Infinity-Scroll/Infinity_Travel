@@ -22,6 +22,9 @@ class RoomSerializer(serializers.ModelSerializer):
         return [
             {
                 "nickname": member.user.nickname,
+                "profile_img": member.user.image_url.url
+                if member.user.image_url
+                else None,
             }
             for member in other_members
         ]
