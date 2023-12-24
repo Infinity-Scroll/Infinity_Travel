@@ -1,8 +1,10 @@
-from channels.db import database_sync_to_async
-from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
+
 from rest_framework_simplejwt.tokens import AccessToken, TokenError
 from rest_framework.response import Response
-from .models import *
+from channels.db import database_sync_to_async
+
+from .models import Rooms, Room_members, Messages
 
 User = get_user_model()
 
