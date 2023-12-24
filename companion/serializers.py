@@ -29,32 +29,12 @@ class Companion_CommentSerializer(serializers.ModelSerializer):
 class CompanionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Companions
-        fields = ('id', 'area', 'title', 'content', 'comments', 'start_date', 'end_date', 'views', 'age_tag', 'user_nickname', 'created_at', 'updated_at', 'companion_recruits', 'current_member', 'status')
+        fields = ('id', 'area', 'title', 'content', 'comments', 'start_date', 'end_date', 'views', 'age_tag', 'user_nickname', 'created_at', 'updated_at', 'total_recruits', 'current_recruits', 'status')
 
     comments = Companion_CommentSerializer(many=True, read_only=True)
     user_nickname = serializers.CharField(source='user.nickname', read_only=True)
     views = serializers.ReadOnlyField()
     age_tag = serializers.SerializerMethodField()
-    status = serializers.SerializerMethodField()
-
-    def validate(self, data):
-        companion_recruits = data.get('companion_recruits')
-        current_member = data.get('current_member')
-
-        if companion_recruits < current_member:
-            raise serializers.ValidationError("현재 인원이 모집 인원보다 많습니다.")
-        if companion_recruits < 2:
-            raise serializers.ValidationError("모집 인원은 2명 이상이어야 합니다.")
-        if current_member < 1:
-            raise serializers.ValidationError("현재 인원은 1명 이상이어야 합니다.")
-
-        return data
-
-    def get_status(self, obj):
-        companion_recruits = obj.companion_recruits
-        current_member = obj.current_member
-        result = '모집완료' if companion_recruits == current_member else '모집중'
-        return result
 
     @staticmethod
     def determine_age_group(age):
