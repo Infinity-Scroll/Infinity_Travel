@@ -49,7 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     gender = models.CharField(max_length=6, choices=GENDER)
     nickname = models.CharField(max_length=20)
     birth = models.DateField()
-    introduction = models.TextField()
+    introduction = models.TextField(blank=True)
     image_url = models.ImageField(upload_to="accounts/image_url/%y/%m%d", blank=True)
     REQUIRED_FIELDS = ["password", "gender", "nickname", "birth"]
 

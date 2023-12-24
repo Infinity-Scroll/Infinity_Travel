@@ -17,12 +17,13 @@ class RoomListAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         user_id = get_user_id(self.request)
+        room_ids = Room_members.objects.filter(
+            user=user_id, is_visibled=True
+        ).values_list("room", flat=True)
 
-        return (
-            Rooms.objects.filter(visibility__user=user_id)
-            .exclude(visibility__is_visibled=False)
-            .order_by("-updated_at")
-        )
+        queryset = Rooms.objects.filter(id__in=room_ids)
+        print(queryset.query)
+        return queryset
 
 
 class RoomCreateAPIView(generics.CreateAPIView):
