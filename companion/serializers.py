@@ -29,7 +29,7 @@ class Companion_CommentSerializer(serializers.ModelSerializer):
 class CompanionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Companions
-        fields = ('id', 'area', 'title', 'content', 'comments', 'start_date', 'end_date', 'views', 'age_tag', 'user_nickname', 'created_at', 'updated_at', 'companion_recruits', 'current_member', 'status')
+        fields = ('id', 'area', 'title', 'content', 'comments', 'start_date', 'end_date', 'views', 'age_tag', 'user_nickname', 'created_at', 'updated_at', 'total_recruits', 'current_recruits', 'status')
 
     comments = Companion_CommentSerializer(many=True, read_only=True)
     user_nickname = serializers.CharField(source='user.nickname', read_only=True)
