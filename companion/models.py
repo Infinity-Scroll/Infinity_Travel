@@ -15,18 +15,12 @@ class LimitedURLField(models.URLField):
 
 
 class Companions(TimestampedModel, AreaModel):
-    STATUS_CHOICES = [
-        ('A', '모집중'),
-        ('Z', '모집완료'),
-    ]
-
     title = models.CharField(max_length=20)
     content = models.CharField(max_length=500)
     views = models.IntegerField(default=0, null=False)
     start_date = models.DateField()
     end_date = models.DateField()
     image = models.ImageField(null=True, blank=True)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='A', blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     companion_recruits = models.IntegerField(default=2, null=False)
     current_member = models.IntegerField(default=1, null=False)
