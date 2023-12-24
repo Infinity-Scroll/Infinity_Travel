@@ -22,6 +22,9 @@ class RoomSerializer(serializers.ModelSerializer):
         return [
             {
                 "nickname": member.user.nickname,
+                "profile_img": request.build_absolute_uri(member.user.image_url.url)
+                if member.user.image_url
+                else None,
             }
             for member in other_members
         ]
@@ -79,11 +82,12 @@ class RoomCreateSerializer(serializers.ModelSerializer):
 
 class MessageSerializer(serializers.ModelSerializer):
     nickname = serializers.CharField(source="user.nickname", read_only=True)
+    image_url = serializers.ImageField(source="user.image_url", read_only=True)
     is_sender = serializers.SerializerMethodField()
 
     class Meta:
         model = Messages
-        fields = ["is_sender", "nickname", "message", "created_at"]
+        fields = ["is_sender", "nickname", "image_url", "message", "created_at"]
 
     def get_is_sender(self, obj):
         request = self.context.get("request")
