@@ -39,9 +39,17 @@ jobs:
             git pull
 
             echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" > .env
-            echo "DEBUG=${{ secrets.DEBUG }}" > .env
-            echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" > .env
-            echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" > .env
+            echo "DEBUG=${{ secrets.DEBUG }}" >> .env
+            echo "REDIS=${{ secrets.REDIS }}" >> .env
+            echo "REDIS_CLOUD_HOST=${{ secrets.REDIS_CLOUD_HOST }}" >> .env
+            echo "REDIS_CLOUD_PORT=${{ secrets.REDIS_CLOUD_PORT }}" >> .env
+            echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> .env
+            echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> .env
+            echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" >> .env
+            echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> .env
+            echo "EMAIL_USE_TLS=${{ secrets.EMAIL_USE_TLS }}" >> .env
+            echo "DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }}" >> .env
+            echo "HOST=${{ secrets.HOST }}" >> .env
 
             pip install -r requirements.txt
             sudo systemctl restart infinity-travel nginx
