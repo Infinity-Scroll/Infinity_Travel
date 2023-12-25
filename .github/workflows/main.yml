@@ -33,9 +33,7 @@ jobs:
 
             set -e
 
-            cd /home/ubuntu/
-            source ./venv/bin/activate
-            cd Infinity_Travel_BE/
+            cd /home/ubuntu/Infinity_Travel_BE/
             git pull
 
             echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" > .env
@@ -51,5 +49,8 @@ jobs:
             echo "DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }}" >> .env
             echo "HOST=${{ secrets.HOST }}" >> .env
 
+            cd /home/ubuntu/
+            source venv/bin/activate
+            cd Infinity_Travel_BE/
             pip install -r requirements.txt
             sudo systemctl restart infinity-travel nginx
