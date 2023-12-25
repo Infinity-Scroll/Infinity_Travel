@@ -38,5 +38,11 @@ jobs:
             cd Infinity_Travel_BE/
             git pull
 
+            # echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" > .env
+            # echo "DEBUG=${{ secrets.DEBUG }}" >> .env
+            # echo "REDIS=${{ secrets.REDIS }}" >> .env
+            # echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" >> .env
+            # echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> .env
+
             pip install -r requirements.txt
             sudo systemctl restart infinity-travel nginx
