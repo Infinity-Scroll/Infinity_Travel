@@ -1,5 +1,6 @@
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode
+from django.shortcuts import redirect
 
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
@@ -106,10 +107,10 @@ class EmailVerificationView(APIView):
         if user is not None and default_token_generator.check_token(user, token):
             user.is_active = True
             user.save()
-            return Response(
-                {"email": user.email, "message": "회원가입에 성공하였습니다!"},
-                status=status.HTTP_201_CREATED,
-            )
+
+            success_url = "https://www.infinity-travel.shop/front/pages/login.html"
+            success_message = "success"
+            return redirect(success_url + f"?message={success_message}")
         else:
             return Response(
                 {"message": "URL오류입니다."}, status=status.HTTP_400_BAD_REQUEST
