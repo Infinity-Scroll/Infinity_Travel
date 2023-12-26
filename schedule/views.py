@@ -1,6 +1,7 @@
-from rest_framework import generics, viewsets
+from django.urls import reverse
+from rest_framework import generics, viewsets, status
 from rest_framework.permissions import AllowAny
-# from .permissions import IsOwnerOrReadOnlySchedule, IsOwnerOrReadOnlyPeriodEvent, IsOwnerOrReadOnlyDateEvent
+from rest_framework.response import Response
 from core.permissions import IsOwner, JWTCookieAuthenticated, JWTCookieIsOwnerorReadOnly
 from .models import Planners, PeriodEvents, DateEvents, DateEventPlaces
 from .serializers import (
@@ -8,42 +9,44 @@ from .serializers import (
     DateEventPlaceSerializer
 )
 
-# CUD의 경우는 작성자만 가능하도록 변경
 class JWTCookieIsOwnerOrReadOnlyMixin:
     def get_permissions(self):
         if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
             return [JWTCookieIsOwnerorReadOnly()]
         return [AllowAny()]
 
-# 최상위 Planner에 대한 CRUD 뷰
 class PlannerViewSet(JWTCookieIsOwnerOrReadOnlyMixin, viewsets.ModelViewSet):
     queryset = Planners.objects.all()
     serializer_class = PlannerSerializer
     
+    def get_queryset(self):
+        queryset = Planners.objects.all()
+        name_query = self.request.query_params.get('name', None)
+        if name_query is not None:
+            queryset = queryset.filter(name__icontains=name_query)
+        return queryset
 
-# PeriodEvent에 대한 CRUD 뷰
+
 class PeriodEventViewSet(JWTCookieIsOwnerOrReadOnlyMixin, viewsets.ModelViewSet):
     queryset = PeriodEvents.objects.all()
     serializer_class = PeriodEventSerializer
 
-# DateEvent에 대한 CRUD 뷰
+
 class DateEventViewSet(JWTCookieIsOwnerOrReadOnlyMixin, viewsets.ModelViewSet):
     queryset = DateEvents.objects.all()
     serializer_class = DateEventSerializer
 
-# DateEventPlace에 대한 CRUD 뷰
+
 class DateEventPlaceViewSet(JWTCookieIsOwnerOrReadOnlyMixin, viewsets.ModelViewSet):
     queryset = DateEventPlaces.objects.all()
     serializer_class = DateEventPlaceSerializer
 
-# 나머지 일반적인 기능을 수행하는 view들
+
 class PlannerListCreateAPIView(JWTCookieIsOwnerOrReadOnlyMixin, generics.ListCreateAPIView):
     queryset = Planners.objects.all()
     serializer_class = PlannerSerializer
 
+
 class PlannerDetailAPIView(JWTCookieIsOwnerOrReadOnlyMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = Planners.objects.all()
     serializer_class = PlannerSerializer
-    
-    #  'retrieve', 'update', 'destroy'  3가지 액션 지원
-

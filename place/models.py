@@ -34,8 +34,8 @@ class Places(models.Model):
 
     class Meta:
         app_label = 'place'
-        
-        
+
+ 
 class Place_comments(models.Model):
     place = models.ForeignKey(Places, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
