@@ -38,7 +38,7 @@ class Places(models.Model):
  
 class Place_comments(models.Model):
     place = models.ForeignKey(Places, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(6)])
 
