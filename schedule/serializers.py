@@ -9,21 +9,21 @@ class DateEventPlaceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DateEventPlaces
-        fields = ['order', 'place']
+        fields = '__all__'
 
 class DateEventSerializer(serializers.ModelSerializer):
     date_event_places = DateEventPlaceSerializer(many=True, read_only=True)
 
     class Meta:
         model = DateEvents
-        fields = ['event_date', 'date_event_places']
+        fields = '__all__'
 
 class PeriodEventSerializer(serializers.ModelSerializer):
     date_events = DateEventSerializer(many=True, read_only=True)
 
     class Meta:
         model = PeriodEvents
-        fields = ['name', 'start_date', 'end_date', 'date_events']
+        fields = '__all__'
         
 class PlannerSerializer(serializers.ModelSerializer):
     period_events = PeriodEventSerializer(many=True, read_only=True)
@@ -32,4 +32,4 @@ class PlannerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Planners
-        fields = ['name', 'start_date', 'end_date', 'public_flag', 'area', 'period_events', 'user_image_url','user_pk']
+        fields = '__all__'
