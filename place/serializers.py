@@ -8,11 +8,11 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Place_comments
-        fields = ['place', 'user', 'content', 'rating', 'user_image_url', 'user_name']
+        fields = '__all__'
 
 class PlaceSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Places
-        fields = ['name', 'description', 'address', 'category', 'contact', 'website', 'image_url', 'latitude', 'longitude', 'rating','comments']
+        fields = '__all__'

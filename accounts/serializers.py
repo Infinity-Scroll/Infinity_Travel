@@ -42,7 +42,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         )
         token = default_token_generator.make_token(user)
 
-        verification_link = f"http://{os.environ.get('HOST')}/accounts/verify-email/{urlsafe_base64_encode(force_bytes(user.pk))}/{token}/"
+        verification_link = f"https://{os.environ.get('HOST')}/accounts/verify-email/{urlsafe_base64_encode(force_bytes(user.pk))}/{token}/"
         message = f"가입을 완료하려면 다음 링크를 클릭하세요: {verification_link}"
         email_message = EmailMessage(
             subject="Infinify_Travel 회원가입 인증 메일입니다.",
