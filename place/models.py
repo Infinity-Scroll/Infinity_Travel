@@ -1,7 +1,7 @@
 from django.db import models
 from .geoCode import get_coordinates
 from django.conf import settings
-from django.contrib.auth.models import User
+from accounts.models import User
 
 class Places(models.Model):
     name = models.CharField(max_length=255, null=False)
