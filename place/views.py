@@ -22,6 +22,15 @@ class PlaceViewSet(JWTCookieIsOwnerOrReadOnlyMixin, viewsets.ModelViewSet):
     queryset = Places.objects.all()
     serializer_class = PlaceSerializer
     
+    def get_queryset(self):
+        queryset = Places.objects.all()
+        name_query = self.request.query_params.get('name', None)
+
+        if name_query:
+            queryset = queryset.filter(Q(name__icontains=name_query) | Q(description__icontains=name_query))
+
+        return queryset
+    
 class CommentViewSet(JWTCookieIsOwnerOrReadOnlyMixin, viewsets.ModelViewSet):
     queryset = Place_comments.objects.all()
     serializer_class = CommentSerializer

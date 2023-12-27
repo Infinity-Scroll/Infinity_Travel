@@ -80,3 +80,16 @@ class DateEventPlaces(models.Model):
 
     def __str__(self):
         return f"{self.order} - {self.date_event} - {self.place}"
+    
+    @classmethod
+    def add_places_to_date_event(cls, date_event, place_ids):
+        # date_event에 연결된 DateEventPlaces 가져오기
+        date_event_places = cls.objects.filter(date_event=date_event)
+
+        # 기존의 DateEventPlaces 삭제
+        date_event_places.delete()
+
+        # 새로운 DateEventPlaces 생성
+        for order, place_id in enumerate(place_ids, start=1):
+            place = Places.objects.get(pk=place_id)
+            cls.objects.create(date_event=date_event, order=order, place=place)
