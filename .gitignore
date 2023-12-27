@@ -5,7 +5,7 @@
 # Compiled Object files
 *.o
 *.obj
-
+static
 # Compiled Dynamic libraries
 *.so
 *.dylib
