@@ -1,0 +1,48 @@
+name: Infinity_Travel_BE CI/CD
+
+on:
+  push:
+    branches: ["release"]
+  pull_request:
+    branches: ["release"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 체크아웃 레포지토리
+        uses: actions/checkout@v3
+
+      - name: 파이썬 설정
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+
+      - name: 의존성 설치
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 서버 배포
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+
+            set -e
+
+            cd /home/ubuntu/
+            source ./venv/bin/activate
+            cd Infinity_Travel_BE/
+            git pull
+
+            # echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" > .env
+            # echo "DEBUG=${{ secrets.DEBUG }}" >> .env
+            # echo "REDIS=${{ secrets.REDIS }}" >> .env
+            # echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" >> .env
+            # echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> .env
+
+            pip install -r requirements.txt
+            sudo systemctl restart infinity-travel nginx

@@ -1,6 +1,7 @@
 from django.db import models
 from .geoCode import get_coordinates
 from django.conf import settings
+from accounts.models import User
 
 class Places(models.Model):
     name = models.CharField(max_length=255, null=False)
@@ -14,6 +15,7 @@ class Places(models.Model):
     longitude = models.FloatField(blank=True, null=True,editable=False)
     rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(6)])
 
+    # 만약 api 쪽 에러가나면 어떻게 처리하고 있어요. 가 필요할듯
     def save(self, *args, **kwargs):
         # 만약 주소가 비어 있다면
         if not self.latitude and not self.longitude and self.address:
@@ -32,14 +34,12 @@ class Places(models.Model):
 
     class Meta:
         app_label = 'place'
-        
-        
-class Comments(models.Model):
+ 
+class Place_comments(models.Model):
     place = models.ForeignKey(Places, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
-    rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(6)])  # 0 to 5 rating
+    rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(6)])
 
     def __str__(self):
-        return f"{self.author}'s commen t on {self.place.name}"
-
+        return f"{self.user}'s comment on {self.place.name}"
