@@ -29,12 +29,21 @@ class Companion_CommentSerializer(serializers.ModelSerializer):
 class CompanionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Companions
-        fields = ('id', 'area', 'title', 'content', 'comments', 'start_date', 'end_date', 'views', 'age_tag', 'user_nickname', 'created_at', 'updated_at', 'total_recruits', 'current_recruits', 'status')
+        fields = ('id', 'area', 'title', 'content', 'companion_comments', 'start_date', 'end_date', 'views', 'age_tag', 'user_nickname', 'created_at', 'updated_at', 'total_recruits', 'current_recruits', 'status', 'thumbnail_image_url', 'sub_image_url_a', 'sub_image_url_b', 'sub_image_url_c')
 
-    comments = Companion_CommentSerializer(many=True, read_only=True)
+    companion_comments = Companion_CommentSerializer(many=True, read_only=True)
     user_nickname = serializers.CharField(source='user.nickname', read_only=True)
     views = serializers.ReadOnlyField()
     age_tag = serializers.SerializerMethodField()
+
+    def validate(self, data):
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
+
+        if start_date > end_date:
+            raise serializers.ValidationError("여행 날짜를 재확인 해주세요.")
+
+        return data
 
     @staticmethod
     def determine_age_group(age):

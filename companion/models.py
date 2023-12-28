@@ -16,19 +16,19 @@ class LimitedURLField(models.URLField):
 
 class Companions(TimestampedModel, AreaModel):
     STATUS_CHOICES = [
-        ('A', '모집중'),
-        ('Z', '모집완료'),
+        ('모집중', '모집중'),
+        ('모집완료', '모집완료'),
     ]
     TOTAL_RECRUITS_CHOICES = [
-        ('2명', '총2명'),
-        ('3명', '총3명'),
-        ('4명', '총4명'),
-        ('5명', '총5명'),
-        ('6명', '총6명'),
-        ('7명', '총7명'),
-        ('8명', '총8명'),
-        ('9명', '총9명'),
-        ('10명이상', '총10명이상'),
+        ('총2명', '총2명'),
+        ('총3명', '총3명'),
+        ('총4명', '총4명'),
+        ('총5명', '총5명'),
+        ('총6명', '총6명'),
+        ('총7명', '총7명'),
+        ('총8명', '총8명'),
+        ('총9명', '총9명'),
+        ('총10명이상', '총10명이상'),
     ]
     CURRENT_RECRUITS_CHOICES = [
         ('1명', '1명'),
@@ -49,11 +49,13 @@ class Companions(TimestampedModel, AreaModel):
     end_date = models.DateField()
     image = models.ImageField(null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    total_recruits = models.CharField(max_length=5, choices=STATUS_CHOICES, default='2명', blank=True)
-    current_recruits = models.CharField(max_length=5, choices=STATUS_CHOICES, default='1명', blank=True)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='A', blank=True)
-    thumbnail_image_url = models.URLField(max_length=200, blank=True, null=True) # , default="기본 썸네일 URL")
-    image_url = LimitedURLField(max_length=200, blank=True, null=True, max_urls=3)
+    total_recruits = models.CharField(max_length=10, choices=TOTAL_RECRUITS_CHOICES, default='총2명', blank=True)
+    current_recruits = models.CharField(max_length=10, choices=CURRENT_RECRUITS_CHOICES, default='1명', blank=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='모집중', blank=True)
+    thumbnail_image_url = models.ImageField(upload_to="companion/image_url/", blank=True, null=True) # , default="기본 썸네일 URL")
+    sub_image_url_a = models.ImageField(upload_to="companion/image_url/", blank=True, null=True)
+    sub_image_url_b = models.ImageField(upload_to="companion/image_url/", blank=True, null=True)
+    sub_image_url_c = models.ImageField(upload_to="companion/image_url/", blank=True, null=True)
 
     def __str__(self):
         return self.title
