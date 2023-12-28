@@ -9,3 +9,4 @@ router.register(r"comment", Companion_CommentViewSet)
 urlpatterns = [
     path("", include(router.urls)),
 ]
+
