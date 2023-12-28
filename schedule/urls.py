@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import PlannerViewSet, PeriodEventViewSet, DateEventViewSet, DateEventPlaceViewSet,PlannerListCreateAPIView, PlannerDetailAPIView,update_date_events
+from .views import get_user_id
 
 router = DefaultRouter()
 
@@ -14,5 +15,6 @@ urlpatterns = [
     # 기존의 views를 위한 URL 패턴들
     path('api/planner/list-create/', PlannerListCreateAPIView.as_view(), name='planner-list-create'),
     path('api/planner/detail/<int:pk>/', PlannerDetailAPIView.as_view(), name='planner-detail'),
-    path('update-date-events/', update_date_events, name='update_date_events')
+    path('update-date-events/', update_date_events, name='update_date_events'),
+    path('get_user_id/', get_user_id, name='get_user_id'),
 ]

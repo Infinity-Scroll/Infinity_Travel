@@ -34,7 +34,6 @@ class Places(models.Model):
 
     class Meta:
         app_label = 'place'
-
  
 class Place_comments(models.Model):
     place = models.ForeignKey(Places, on_delete=models.CASCADE)
@@ -44,4 +43,3 @@ class Place_comments(models.Model):
 
     def __str__(self):
         return f"{self.user}'s comment on {self.place.name}"
-

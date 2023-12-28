@@ -4,6 +4,7 @@ import json
 from rest_framework import generics, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.decorators import action
 from core.permissions import IsOwner, JWTCookieAuthenticated, JWTCookieIsOwnerorReadOnly
 from .models import Planners, PeriodEvents, DateEvents, DateEventPlaces
@@ -83,3 +84,9 @@ def update_date_events(request):
             return JsonResponse({'error': str(e)}, status=500)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+# 유저 id 가져오기용
+def get_user_id(request):
+    token = AccessToken(request.COOKIES.get("access_token"))
+    user_id = token.payload["user_id"]
+    return user_id
