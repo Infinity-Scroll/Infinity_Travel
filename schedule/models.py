@@ -10,7 +10,7 @@ class Planners(AreaModel, models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     public_flag = models.BooleanField(default=True)  # 공개 여부 플래그
-    user = models.ForeignKey(User, on_delete=models.CASCADE, to_field='email')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
