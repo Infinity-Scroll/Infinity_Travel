@@ -10,10 +10,10 @@
 
 ## 📌 팀원 소개
 
-|                                                                     김창환🚩                                                                      |                                            남정식                                            |                                           심주용                                            |                                           윤여범                                            |
-| :-----------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: |
-| <img src="https://github.com/Infinity-Scroll/Infinity_Travel_BE/assets/138690980/7039dd11-5647-44d8-9a18-d2caea2f5a39" width="200" height="230" > | <img src="https://avatars.githubusercontent.com/u/109896609?v=4"  width="200" height="230"/> | <img src="https://avatars.githubusercontent.com/u/142385807?v=4" width="200" height="230"/> | <img src="https://avatars.githubusercontent.com/u/147234803?v=4" width="200" height="230"/> |
-|                                    <a href="https://github.com/Blood-donation-day"> 🌱 Blood-donation-day</a>                                     |                      <a href="https://github.com/sk7556">🌱 sk7556</a>                       |                  <a href="https://github.com/SimJuyong1">🌱 SimJuyong1</a>                  |                     <a href="https://github.com/yabdove">🌱 yabdove</a>                     |
+|                                                                     김창환🚩                                                                      |                                            남정식                                            |                                                                      심주용                                                                       |                                           윤여범                                            |
+| :-----------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: |
+| <img src="https://github.com/Infinity-Scroll/Infinity_Travel_BE/assets/138690980/7039dd11-5647-44d8-9a18-d2caea2f5a39" width="200" height="230" > | <img src="https://avatars.githubusercontent.com/u/109896609?v=4"  width="200" height="230"/> | <img src="https://github.com/Infinity-Scroll/Infinity_Travel_BE/assets/138690980/a7a1ee18-27b9-4d09-846e-ef11b121aa2c" width="200" height="230"/> | <img src="https://avatars.githubusercontent.com/u/147234803?v=4" width="200" height="230"/> |
+|                                    <a href="https://github.com/Blood-donation-day"> 🌱 Blood-donation-day</a>                                     |                      <a href="https://github.com/sk7556">🌱 sk7556</a>                       |                                             <a href="https://github.com/SimJuyong1">🌱 SimJuyong1</a>                                             |                     <a href="https://github.com/yabdove">🌱 yabdove</a>                     |
 
 ## 목차
 
@@ -64,14 +64,23 @@
 
 ### 2-2. 배포 URL
 
-프론트엔드 페이지
-https://www.infinity-travel.shop/front/pages/
+<details>
+  <summary> 테스트계정</summary>
+  
+```
+ID: test123@test123.com
+PW: test123
+
+채팅테스트 2번 ID
+ID: test1@test1.com
+PW: test123
 
 ```
-테스트계정(아직 작동 X)
-test1234@test1234.com
-mypwd1234
-```
+
+</details>
+
+프론트엔드 페이지
+https://www.infinity-travel.shop/front/pages/
 
 백엔드
 https://www.infinity-travel.shop/
@@ -81,80 +90,82 @@ https://www.infinity-travel.shop/
 ### 3.1프로젝트 구조
 
 ```
+
 📦Infinity_Travel_BE
- ┣ 📂.github
- ┃ ┗ 📂workflows
- ┃ ┃ ┗ 📜main.yml
- ┣ 📂accounts
- ┃ ┣ 📂migrations
- ┃ ┣ 📜admin.py
- ┃ ┣ 📜apps.py
- ┃ ┣ 📜models.py
- ┃ ┣ 📜serializers.py
- ┃ ┣ 📜tests.py
- ┃ ┣ 📜urls.py
- ┃ ┣ 📜utils.py
- ┃ ┣ 📜views.py
- ┃ ┗ 📜__init__.py
- ┣ 📂chat
- ┃ ┣ 📂migrations
- ┃ ┣ 📜admin.py
- ┃ ┣ 📜apps.py
- ┃ ┣ 📜chatting2.html
- ┃ ┣ 📜consumers.py
- ┃ ┣ 📜models.py
- ┃ ┣ 📜routing.py
- ┃ ┣ 📜serializers.py
- ┃ ┣ 📜tests.py
- ┃ ┣ 📜urls.py
- ┃ ┣ 📜utils.py
- ┃ ┣ 📜views.py
- ┃ ┗ 📜__init__.py
- ┣ 📂companion
- ┃ ┣ 📂migrations
- ┃ ┣ 📜admin.py
- ┃ ┣ 📜apps.py
- ┃ ┣ 📜models.py
- ┃ ┣ 📜serializers.py
- ┃ ┣ 📜tests.py
- ┃ ┣ 📜urls.py
- ┃ ┣ 📜views.py
- ┃ ┗ 📜__init__.py
- ┣ 📂core
- ┃ ┣ 📜models.py
- ┃ ┗ 📜permissions.py
- ┣ 📂infinity_travel
- ┃ ┣ 📜asgi.py
- ┃ ┣ 📜settings.py
- ┃ ┣ 📜urls.py
- ┃ ┣ 📜wsgi.py
- ┃ ┗ 📜__init__.py
- ┣ 📂place
- ┃ ┣ 📂migrations
- ┃ ┣ 📜admin.py
- ┃ ┣ 📜apps.py
- ┃ ┣ 📜geoCode.py
- ┃ ┣ 📜models.py
- ┃ ┣ 📜serializers.py
- ┃ ┣ 📜tests.py
- ┃ ┣ 📜urls.py
- ┃ ┣ 📜views.py
- ┃ ┗ 📜__init__.py
- ┣ 📂schedule
- ┃ ┣ 📂migrations
- ┃ ┣ 📜admin.py
- ┃ ┣ 📜apps.py
- ┃ ┣ 📜models.py
- ┃ ┣ 📜serializers.py
- ┃ ┣ 📜tests.py
- ┃ ┣ 📜urls.py
- ┃ ┣ 📜views.py
- ┃ ┗ 📜__init__.py
- ┣ 📜.DS_Store
- ┣ 📜.gitignore
- ┣ 📜manage.py
- ┣ 📜README.md
- ┗ 📜requirements.txt
+┣ 📂.github
+┃ ┗ 📂workflows
+┃ ┃ ┗ 📜main.yml
+┣ 📂accounts
+┃ ┣ 📂migrations
+┃ ┣ 📜admin.py
+┃ ┣ 📜apps.py
+┃ ┣ 📜models.py
+┃ ┣ 📜serializers.py
+┃ ┣ 📜tests.py
+┃ ┣ 📜urls.py
+┃ ┣ 📜utils.py
+┃ ┣ 📜views.py
+┃ ┗ 📜**init**.py
+┣ 📂chat
+┃ ┣ 📂migrations
+┃ ┣ 📜admin.py
+┃ ┣ 📜apps.py
+┃ ┣ 📜chatting2.html
+┃ ┣ 📜consumers.py
+┃ ┣ 📜models.py
+┃ ┣ 📜routing.py
+┃ ┣ 📜serializers.py
+┃ ┣ 📜tests.py
+┃ ┣ 📜urls.py
+┃ ┣ 📜utils.py
+┃ ┣ 📜views.py
+┃ ┗ 📜**init**.py
+┣ 📂companion
+┃ ┣ 📂migrations
+┃ ┣ 📜admin.py
+┃ ┣ 📜apps.py
+┃ ┣ 📜models.py
+┃ ┣ 📜serializers.py
+┃ ┣ 📜tests.py
+┃ ┣ 📜urls.py
+┃ ┣ 📜views.py
+┃ ┗ 📜**init**.py
+┣ 📂core
+┃ ┣ 📜models.py
+┃ ┗ 📜permissions.py
+┣ 📂infinity_travel
+┃ ┣ 📜asgi.py
+┃ ┣ 📜settings.py
+┃ ┣ 📜urls.py
+┃ ┣ 📜wsgi.py
+┃ ┗ 📜**init**.py
+┣ 📂place
+┃ ┣ 📂migrations
+┃ ┣ 📜admin.py
+┃ ┣ 📜apps.py
+┃ ┣ 📜geoCode.py
+┃ ┣ 📜models.py
+┃ ┣ 📜serializers.py
+┃ ┣ 📜tests.py
+┃ ┣ 📜urls.py
+┃ ┣ 📜views.py
+┃ ┗ 📜**init**.py
+┣ 📂schedule
+┃ ┣ 📂migrations
+┃ ┣ 📜admin.py
+┃ ┣ 📜apps.py
+┃ ┣ 📜models.py
+┃ ┣ 📜serializers.py
+┃ ┣ 📜tests.py
+┃ ┣ 📜urls.py
+┃ ┣ 📜views.py
+┃ ┗ 📜**init**.py
+┣ 📜.DS_Store
+┣ 📜.gitignore
+┣ 📜manage.py
+┣ 📜README.md
+┗ 📜requirements.txt
+
 ```
 
 ### 3-2 개발일정
@@ -166,7 +177,7 @@ https://www.infinity-travel.shop/
 
 ### 4-1 아키텍쳐 구성도
 
-아키텍쳐 구성도
+<img src=https://github.com/Infinity-Scroll/Infinity_Travel_BE/assets/138690980/06172cbc-aa63-44bb-aedb-af65e9d60962>
 
 ### 4-2 데이터베이스-모델링 ERD
 
@@ -194,42 +205,69 @@ https://www.infinity-travel.shop/
 
 <br>
 
-|            companion            | Method |        내용        | 로그인 권한 | 작성자 권한 |
-| :-----------------------------: | :----: | :----------------: | :---------: | :---------: |
-|          'roomcreate/'          |  POST  |    채팅방 생성     |     ✅      |     ✅      |
-|           'roomlist/'           |  GET   |   내 채팅방 조회   |     ✅      |     ✅      |
-|       '<str:room_name>/'        |  GET   | 채팅방 메세지 조회 |     ✅      |     ✅      |
-| 'roominvisible/<str:room_name>' |  GET   |    채팅방 숨김     |     ✅      |     ✅      |
+|     companion      | Method |      내용      | 로그인 권한 | 작성자 권한 |
+| :----------------: | :----: | :------------: | :---------: | :---------: |
+|      'list/'       |  GET   | 동행 목록조회  |             |             |
+|      'list/'       |  POST  |  동행 글 작성  |     ✅      |             |
+|  'list/<int:pk>'   |  GET   |  동행 글 상세  |             |             |
+|  'list/<int:pk>'   |  PUT   |  동행 글 수정  |     ✅      |     ✅      |
+|  'list/<int:pk>'   | DELETE |  동행 글 삭제  |     ✅      |     ✅      |
+|     'comment/'     |  POST  | 동행 댓글 작성 |     ✅      |     ✅      |
+| 'comment/<int:pk>' | PATCH  | 동행 댓글 수정 |     ✅      |     ✅      |
+| 'comment/<int:pk>' | DELETE | 동행 댓글 삭제 |     ✅      |     ✅      |
 
 <br>
 
-|             planner             | Method |        내용        | 로그인 권한 | 작성자 권한 |
-| :-----------------------------: | :----: | :----------------: | :---------: | :---------: |
-|          'roomcreate/'          |  POST  |    채팅방 생성     |     ✅      |     ✅      |
-|           'roomlist/'           |  GET   |   내 채팅방 조회   |     ✅      |     ✅      |
-|       '<str:room_name>/'        |  GET   | 채팅방 메세지 조회 |     ✅      |     ✅      |
-| 'roominvisible/<str:room_name>' |  GET   |    채팅방 숨김     |     ✅      |     ✅      |
+|         planner         | Method |      내용      | 로그인 권한 | 작성자 권한 |
+| :---------------------: | :----: | :------------: | :---------: | :---------: |
+|     'api/planners/'     |  POST  |   일정 생성    |     ✅      |             |
+|     'api/planners/'     |  GET   | 일정 목록 조회 |             |             |
+| 'api/planners/<int:pk>' |  GET   | 일정 상세 조회 |             |             |
+| 'api/planners/<int:pk>' | PATCH  |   일정 수정    |     ✅      |     ✅      |
+| 'api/planners/<int:pk>' | DELETE |   일정 삭제    |     ✅      |     ✅      |
 
 <br>
 
-|            schedule             | Method |        내용        | 로그인 권한 | 작성자 권한 |
-| :-----------------------------: | :----: | :----------------: | :---------: | :---------: |
-|          'roomcreate/'          |  POST  |    채팅방 생성     |     ✅      |     ✅      |
-|           'roomlist/'           |  GET   |   내 채팅방 조회   |     ✅      |     ✅      |
-|       '<str:room_name>/'        |  GET   | 채팅방 메세지 조회 |     ✅      |     ✅      |
-| 'roominvisible/<str:room_name>' |  GET   |    채팅방 숨김     |     ✅      |     ✅      |
+|             place             | Method |      내용      | 로그인 권한 | 작성자 권한 |
+| :---------------------------: | :----: | :------------: | :---------: | :---------: |
+|         'api/places/'         |  POST  |   장소 생성    |     ✅      |             |
+|         'api/places/'         |  GET   | 장소 목록 조회 |             |             |
+| 'api/places/<int:comment_id>' |  GET   | 장소 상세 조회 |             |             |
+| 'api/places/<int:comment_id>' | PATCH  |   장소 수정    |     ✅      |     ✅      |
+| 'api/places/<int:comment_id>' | DELETE |   장소 삭제    |     ✅      |     ✅      |
 
 ## 6.메인기능<br>
 
-메인기능사진 회원가입, 로그인, 메인페이지,
+<img src=https://github.com/Infinity-Scroll/Infinity_Travel_BE/assets/138690980/e2adc15e-6487-48d0-bb8e-ae111cf0c250>회원가입 
+
+<img src=https://github.com/Infinity-Scroll/Infinity_Travel_BE/assets/138690980/73f3a8cb-96a9-45e2-bf69-10b0d281af2f>이메일 인증 및 로그인
+
+<img src=https://github.com/Infinity-Scroll/Infinity_Travel_BE/assets/138690980/13e4fd35-f3bf-443d-8999-16b05ff9c5c4>내 프로필
+
+
+<div><img src=https://github.com/Infinity-Scroll/Infinity_Travel_BE/assets/138690980/0c9f5432-1d62-4cb9-bf11-61d814379d00></div>
+프로필 변경
+
+
+
+
+메인페이지,
 동행, 일정
 
 ## 7.추가기능<br>
 
 프로필(변경), 내동행, 내일정
 채팅
+
 <img src=https://github.com/Infinity-Scroll/Infinity_Travel_BE/assets/138690980/e4098055-fd11-498d-8921-c1d214c10532>
-추가기능 사진
+
+
+
+<img src=https://github.com/Infinity-Scroll/Infinity_Travel_BE/assets/138690980/7e952857-1593-4a83-97d3-5894be168e62>
+채팅하기
+
+<img src=https://github.com/Infinity-Scroll/Infinity_Travel_BE/assets/138690980/3d8ad921-b06c-4184-a400-8fb929b18d21>
+스크롤 올려 메세지 더 불러오기 및 나가기
 
 ## 8.개발중 경험한 문제점과 해결방법
 
@@ -259,6 +297,7 @@ class JWTCookieAuthenticated(BasePermission):
         return True
 ```
 
+
 [쿠키에서 access_token값을 가져와 기간, 유효성을 검증하는 permission]
 <br>
 
@@ -279,7 +318,7 @@ class JWTCookieAuthenticated(BasePermission):
 
 <details>
   <summary>Room</summary>
-  
+
 ```python
 class Room(TimestampedModel):
     member = models.ManyToManyField(User, related_name="member")
@@ -338,7 +377,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         ...
 ```
 
-원인은 장고의 ORM은 기본적으로 동기적인 환경에서 사용되도록 설계되었기 때문에, 위와 같은 비동기 함수 안에서 동기적은 ORM메서드를 직접 호출하였기 때문입니다. 따라서 비동기적인 환경에서 백그라운드 스레드를 사용하는 channels.db모듈의 database_sync_to_async를 사용하여 문제를 해결하였습니다.
+원인은 장고의 ORM은 기본적으로 동기적인 환경에서 사용되도록 설계되었기 때문에, 위와 같은 비동기 함수 안에서 동기적인 ORM메서드를 직접 호출하였기 때문입니다. 따라서 비동기적인 환경에서 백그라운드 스레드를 사용하는 channels.db모듈의 database_sync_to_async를 사용하여 문제를 해결하였습니다.
 
 ```python
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -392,9 +431,22 @@ class RoomListAPIView(generics.ListAPIView):
             .exclude(visibility__is_visibled=False)
             .order_by("-updated_at")
         )
-        print(queryset.query)
         return queryset
 ```
+
+```python
+
+class Rooms(TimestampedModel):
+    room_name = models.CharField(max_length=50)
+    lastest_text = models.TextField("마지막 대화")
+
+
+class Room_members(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="member")
+    room = models.ForeignKey(Rooms, on_delete=models.CASCADE, related_name="visibility")
+    is_visibled = models.BooleanField(default=True)
+```
+
 
 초기 채팅방을 불러오는 뷰를 위와같이 작성했습니다. 해당 사용자의 id가 있는 Rooms중 is_visibled=False것은 제외하고 리스트를 제공합니다.
 
@@ -416,7 +468,6 @@ class RoomListAPIView(generics.ListAPIView):
         room_ids = Room_members.objects.filter(
             user=user_id, is_visibled=True
         ).values_list("room", flat=True)
-        print(room_ids.query)
         queryset = Rooms.objects.filter(id__in=room_ids)
         return queryset
 ```
@@ -435,17 +486,24 @@ SELECT "chat_rooms"."id", "chat_rooms"."created_at", "chat_rooms"."updated_at", 
 [최종 채팅]
 <img src=https://github.com/Infinity-Scroll/Infinity_Travel_BE/assets/138690980/e4098055-fd11-498d-8921-c1d214c10532>
 
-#### 채팅문제4
 
-#### 메세지 불러오기
-
--   message모델이 생성될때 페이지 새로고침문제
--   현재 최근 메세지를 30개까지만 불러옴. 페이지네이션으로 더 불러오는 기능 추가 필요 (수정완료)
 
 ## 9.프로젝트 후기(배운점 & 느낀점)
 
-### 창환
+### 김창환
 
-```
-프로젝트 기간동안 고생하셨습니다. 작성중
-```
+모두 프로젝트 기간동안 고생하셨습니다. 첫 팀 프로젝트에서 팀장 역할을 맡아 팀을 이끌었지만 부족한 모습만 팀원분들에게 보여준것 같아 죄송합니다. 그래도 끝까지 따라와주시고 노력해주셔서 감사합니다. 팀으로써 협업을통해 할수있는 경험들을 얻게되었습니다. 프로젝트를 진행하며 재미있는 경험, 아쉬운 경험도 있었고 저에게 큰 자극이 되어 성장하는 계기가 된것같아 만족하고 있습니다. 프로젝트 기간동안 좋은 경험을 얻게 해주신 정식님,주용님,여범님에게 감사 인사를 드립니다. 앞으로도 이 경험을 기억하며 더 노력하는 개발자가 되도록 하겠습니다.
+
+### 남정식
+
+프로젝트의 전체 스펙을 파악하지 못해 필요한 업무 목록, 업무 분배에 문제를 겪었습니다
+본인의 역량이나 행동력에 대해 정량적으로 알 수 있는 기회였고, 여러 번의 프로젝트 경험을 통해 구체화 할 수 있었다
+기존 있던 프로젝트를 참고 함으로서 현재 서비스 되는 프로젝트들의 스펙을 확인하는 경험을 했다
+
+### 심주용
+
+처음 접해본 팀 프로젝트의 진행 상황 및 과정에 대해 기대에 부응하는 부분과 기대와 어긋나는 부분 등에 확실한 경험을 하게 되어 기쁩니다.
+프로젝트의 경험으로 문제해결에 대한 고민할 시간이 많았으며, 이에 대해 조금씩 공부하는 느낌을 받았습니다.
+스스로의 개발 속도에 대해 알아볼 수 있었으며, 자가발전을 위한 방향성을 찾을 수 있었습니다.
+
+
