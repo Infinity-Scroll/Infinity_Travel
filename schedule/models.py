@@ -32,6 +32,7 @@ class Planners(AreaModel, models.Model):
         )
 
 
+
 class PeriodEvents(AreaModel, models.Model):
     planner = models.ForeignKey(Planners, related_name='period_events', on_delete=models.CASCADE)
     start_date = models.DateField()
